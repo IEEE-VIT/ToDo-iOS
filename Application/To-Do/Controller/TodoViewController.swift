@@ -69,6 +69,7 @@ class TodoViewController: UITableViewController {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: todoCellReuseIdentifier)
         let task = todoList[indexPath.row]
         cell.textLabel?.text = task.title
+        cell.detailTextLabel?.text = task.dueDate
         return cell
     }
     

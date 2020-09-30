@@ -19,7 +19,7 @@ class TaskDetailsViewController: UIViewController {
     @IBOutlet weak var taskTitleTextField: UITextField!
     @IBOutlet weak var subTasksTextView: UITextView!
     @IBOutlet weak var endDateTextField: UITextField!
-    @IBOutlet weak var endDatePicker: UIDatePicker!
+    var endDatePicker: UIDatePicker!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
     // VARIABLES
@@ -30,8 +30,9 @@ class TaskDetailsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        endDatePicker.isHidden = true
-        endDateTextField.delegate = self
+        endDatePicker = UIDatePicker()
+        endDatePicker.addTarget(self, action: #selector(didPickDate(_:)), for: .valueChanged)
+        endDateTextField.inputView = endDatePicker
         dateFormatter.dateStyle = .medium
         subTasksTextView.addBorder()
         loadTaskForUpdate()
@@ -71,25 +72,10 @@ class TaskDetailsViewController: UIViewController {
     // IBOUTLET for datepicker
     /// function is called when `Date is changed`
     /// `Dateformatter` is used to convert `Date` to `String`
-    @IBAction func didPickDate(_ sender: UIDatePicker) {
+    @objc func didPickDate(_ sender: UIDatePicker) {
         let selectedDate = sender.date
         endDate = dateFormatter.string(from: selectedDate)
         endDateTextField.text = endDate
     }
     
-}
-
-// Hide DatePicker while not in use.
-extension TaskDetailsViewController : UITextFieldDelegate {
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField == endDateTextField {
-            endDatePicker.isHidden = true
-        }
-    }
-
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        if textField == endDateTextField {
-            endDatePicker.isHidden = false
-        }
-    }
 }

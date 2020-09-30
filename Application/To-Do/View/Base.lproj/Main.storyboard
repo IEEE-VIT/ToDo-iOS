@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="nlJ-9c-VtT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="nlJ-9c-VtT">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -61,19 +63,14 @@
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Enter your subtask here" translatesAutoresizingMaskIntoConstraints="NO" id="SOr-LH-5cU">
                                 <rect key="frame" x="20" y="253" width="374" height="128"/>
-                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
+                                <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="Mi3-nd-tsV">
-                                <rect key="frame" x="0.0" y="621" width="414" height="216"/>
-                                <connections>
-                                    <action selector="didPickDate:" destination="4AD-BL-kUr" eventType="valueChanged" id="EFq-Cm-vzg"/>
-                                </connections>
-                            </datePicker>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="7AC-Jy-fo4"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="SOr-LH-5cU" firstAttribute="top" secondItem="ngX-g4-4zR" secondAttribute="bottom" constant="8" id="1Cj-bc-dHP"/>
                             <constraint firstItem="SOr-LH-5cU" firstAttribute="leading" secondItem="7AC-Jy-fo4" secondAttribute="leading" constant="20" id="5J7-D1-tUG"/>
@@ -85,10 +82,7 @@
                             <constraint firstItem="7AC-Jy-fo4" firstAttribute="trailing" secondItem="DYv-OP-cPx" secondAttribute="trailing" constant="20" id="L2e-hg-zT9"/>
                             <constraint firstItem="ngX-g4-4zR" firstAttribute="leading" secondItem="7AC-Jy-fo4" secondAttribute="leading" constant="20" id="Mw6-Fo-ypS"/>
                             <constraint firstItem="SOr-LH-5cU" firstAttribute="height" secondItem="IF7-jO-lyh" secondAttribute="height" multiplier="0.142857" id="Nob-xn-Xok"/>
-                            <constraint firstItem="7AC-Jy-fo4" firstAttribute="bottom" secondItem="Mi3-nd-tsV" secondAttribute="bottom" constant="25" id="RA4-lr-sgV"/>
-                            <constraint firstItem="Mi3-nd-tsV" firstAttribute="trailing" secondItem="7AC-Jy-fo4" secondAttribute="trailing" id="Xh2-IS-JGb"/>
                             <constraint firstItem="7AC-Jy-fo4" firstAttribute="trailing" secondItem="0O5-ye-SqQ" secondAttribute="trailing" constant="20" id="bI4-Rp-KxC"/>
-                            <constraint firstItem="Mi3-nd-tsV" firstAttribute="leading" secondItem="7AC-Jy-fo4" secondAttribute="leading" id="bqA-8m-iea"/>
                             <constraint firstItem="oGd-cS-aUS" firstAttribute="top" secondItem="SOr-LH-5cU" secondAttribute="bottom" constant="30" id="dFp-6F-mhR"/>
                             <constraint firstItem="DYv-OP-cPx" firstAttribute="top" secondItem="aD0-wr-4cR" secondAttribute="bottom" constant="15" id="eEh-pK-aPF"/>
                             <constraint firstItem="DYv-OP-cPx" firstAttribute="leading" secondItem="7AC-Jy-fo4" secondAttribute="leading" constant="20" id="hE3-p2-asy"/>
@@ -98,7 +92,6 @@
                             <constraint firstItem="aD0-wr-4cR" firstAttribute="top" secondItem="7AC-Jy-fo4" secondAttribute="top" constant="30" id="mO8-ND-JXo"/>
                             <constraint firstItem="aD0-wr-4cR" firstAttribute="leading" secondItem="7AC-Jy-fo4" secondAttribute="leading" constant="20" id="yJH-LP-vqT"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="7AC-Jy-fo4"/>
                     </view>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="4zH-lp-Fau">
                         <barButtonItem key="rightBarButtonItem" title="Save" style="plain" id="Zfe-d1-cWG">
@@ -108,7 +101,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="endDatePicker" destination="Mi3-nd-tsV" id="gW2-at-Sqk"/>
                         <outlet property="endDateTextField" destination="0O5-ye-SqQ" id="f9x-Mx-5Yb"/>
                         <outlet property="saveButton" destination="Zfe-d1-cWG" id="CS6-gQ-3b9"/>
                         <outlet property="subTasksTextView" destination="SOr-LH-5cU" id="Tgd-o5-RzQ"/>
@@ -126,7 +118,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="LGs-Rx-YcS">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="todocell" textLabel="SFN-cl-Wx0" detailTextLabel="n4a-N5-f2Y" rowHeight="75" style="IBUITableViewCellStyleSubtitle" id="wkZ-0H-4Ms">
                                 <rect key="frame" x="0.0" y="28" width="414" height="75"/>
@@ -136,7 +128,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="SFN-cl-Wx0">
-                                            <rect key="frame" x="20" y="17" width="33.5" height="20.5"/>
+                                            <rect key="frame" x="20" y="17" width="33" height="20.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
@@ -172,4 +164,15 @@
             <point key="canvasLocation" x="-7.2463768115942031" y="129.91071428571428"/>
         </scene>
     </scenes>
+    <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

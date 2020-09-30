@@ -14,7 +14,7 @@ Kindly consider leaving a :star: if you like the repository and our organisation
 
 * Clone your forked repo and move inside it:
 
-`git clone https://github.com/aaryankotharii/TODO.git && cd TODO
+`git clone https://github.com/IEEE-VIT/TODO.git && cd TODO`
 
 * Checkout to a new branch to work on an issue:
 

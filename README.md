@@ -1,7 +1,7 @@
 <p align="center"><img width="40%" src="https://hacktoberfest.digitalocean.com/assets/HF-full-logo-b05d5eb32b3f3ecc9b2240526104cf4da3187b8b61963dd9042fdc2536e4a76c.svg"/></p>
 
 # Hacktoberfest 2020 with IEEE-VIT :heart:
-short one-two liner description about the repo .
+This is a simple ToDo iOS application built using swift. Users can also add subtasks and deadlines along with their tasks!
 
 Support open source software by participating in [Hacktoberfest](https://hacktoberfest.digitalocean.com) and get goodies and a free t-shirt! :yellow_heart:
 

@@ -30,6 +30,8 @@ class TaskDetailsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        endDatePicker.isHidden = true
+        endDateTextField.delegate = self
         dateFormatter.dateStyle = .medium
         subTasksTextView.addBorder()
         loadTaskForUpdate()
@@ -75,4 +77,19 @@ class TaskDetailsViewController: UIViewController {
         endDateTextField.text = endDate
     }
     
+}
+
+// Hide DatePicker while not in use.
+extension TaskDetailsViewController : UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField == endDateTextField {
+            endDatePicker.isHidden = true
+        }
+    }
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField == endDateTextField {
+            endDatePicker.isHidden = false
+        }
+    }
 }

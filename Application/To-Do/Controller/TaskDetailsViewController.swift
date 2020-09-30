@@ -33,7 +33,6 @@ class TaskDetailsViewController: UIViewController {
         dateFormatter.dateStyle = .medium
         subTasksTextView.addBorder()
         loadTaskForUpdate()
-        saveButton.title = (task == nil) ? "Save" : "Update"
     }
     
     

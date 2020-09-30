@@ -26,25 +26,26 @@ class TodoViewController: UITableViewController {
     //MARK: View lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        // TODO: initial setup if any
     }
     
     
     //MARK: IBActions
+    /// perform segue to `TaskDetailsViewController` if `+` tapped
     @IBAction func addTasksTapped(_ sender: UIBarButtonItem) {
         performSegue(withIdentifier: taskDetailsIdentifier, sender: Any?.self)
     }
     
-    ///Edit task
-    /// function called when `Delete Task` tapped
-    func editTask(){
-        
+    ///Star task
+    /// function called when `Star Task` tapped
+    func starTask(at index : Int){
+        //TODO: write star login
     }
     
     ///Delete task
     /// function called when `Delete Task` tapped
     func deleteTask(at index : Int){
-        
+        //TODO: write delete login
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -68,7 +69,6 @@ class TodoViewController: UITableViewController {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: todoCellReuseIdentifier)
         let task = todoList[indexPath.row]
         cell.textLabel?.text = task.title
-        cell.detailTextLabel?.text = "due: " + task.dueDate
         return cell
     }
     
@@ -82,12 +82,13 @@ class TodoViewController: UITableViewController {
     //MARK:  ----- Tableview Delagate methods  ------
     // Reference: https://developer.apple.com/documentation/uikit/uitableviewdelegate
     
+    /// `UISwipeActionsConfiguration` for delete and star  buttons
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let delete = UIContextualAction(style: .destructive, title: "Delete") {  (_, _, _) in
             self.deleteTask(at: indexPath.row)
         }
         let star = UIContextualAction(style: .normal, title: "Star") {  (_, _, _) in
-            // TODO write star logic
+            self.starTask(at: indexPath.row)
         }
         star.backgroundColor = .orange
         
@@ -102,23 +103,16 @@ class TodoViewController: UITableViewController {
     }
 }
 
+//MARK: - TaskDelegate
+/// protocol for `saving` or `updating` `Tasks`
 extension TodoViewController : TaskDelegate{
     func didTapSave(task: Task) {
-        todoList.append(task)
-        tableView.reloadData()
+        todoList.append(task) /// add task
+        tableView.reloadData() /// Reload tableview with new data
     }
     
     func didTapUpdate(task: Task) {
-        print("update")
-        print(task)
-        todoList[lastIndexTapped] = task
-        tableView.reloadData()
-    }
-}
-
-//MARK:- Textview Delagate methods
-extension TodoViewController: UITextViewDelegate {
-    func textViewDidEndEditing(_ textView: UITextView) {
-        todoList[textView.tag].title = textView.text
+        todoList[lastIndexTapped] = task /// edit task
+        tableView.reloadData() /// Reload tableview with new data
     }
 }

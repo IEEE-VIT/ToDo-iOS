@@ -19,12 +19,12 @@ class TaskDetailsViewController: UIViewController {
     @IBOutlet weak var taskTitleTextField: UITextField!
     @IBOutlet weak var subTasksTextView: UITextView!
     @IBOutlet weak var endDateTextField: UITextField!
-    var endDatePicker: UIDatePicker!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
     // VARIABLES
     var task : Task? = nil
     var endDate : String = ""
+    var endDatePicker: UIDatePicker!
     var dateFormatter = DateFormatter()
     weak var delegate : TaskDelegate?
     

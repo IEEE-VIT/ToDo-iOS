@@ -19,17 +19,20 @@ class TaskDetailsViewController: UIViewController {
     @IBOutlet weak var taskTitleTextField: UITextField!
     @IBOutlet weak var subTasksTextView: UITextView!
     @IBOutlet weak var endDateTextField: UITextField!
-    @IBOutlet weak var endDatePicker: UIDatePicker!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
     // VARIABLES
     var task : Task? = nil
     var endDate : String = ""
+    var endDatePicker: UIDatePicker!
     var dateFormatter = DateFormatter()
     weak var delegate : TaskDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        endDatePicker = UIDatePicker()
+        endDatePicker.addTarget(self, action: #selector(didPickDate(_:)), for: .valueChanged)
+        endDateTextField.inputView = endDatePicker
         dateFormatter.dateStyle = .medium
         subTasksTextView.addBorder()
         loadTaskForUpdate()
@@ -69,7 +72,7 @@ class TaskDetailsViewController: UIViewController {
     // IBOUTLET for datepicker
     /// function is called when `Date is changed`
     /// `Dateformatter` is used to convert `Date` to `String`
-    @IBAction func didPickDate(_ sender: UIDatePicker) {
+    @objc func didPickDate(_ sender: UIDatePicker) {
         let selectedDate = sender.date
         endDate = dateFormatter.string(from: selectedDate)
         endDateTextField.text = endDate

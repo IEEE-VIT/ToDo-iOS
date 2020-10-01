@@ -75,12 +75,6 @@ class TaskDetailsViewController: UIViewController {
     /// `Dateformatter` is used to convert `Date` to `String`
     @objc func didPickDate(_ sender: UIDatePicker) {
         let selectedDate = sender.date
-        
-        // Properties added for date formatting
-        dateFormatter.amSymbol = "am"
-        dateFormatter.pmSymbol = "pm"
-        dateFormatter.dateFormat = "dd MMMM yyyy hh:mm a"
-        
         endDate = dateFormatter.string(from: selectedDate)
         endDateTextField.text = endDate
     }

@@ -45,7 +45,6 @@ class TodoViewController: UITableViewController {
     ///Delete task
     /// function called when `Delete Task` tapped
     func deleteTask(at index : Int){
-        //TODO: write delete login
         todoList.remove(at: index) /// removes task at index
         tableView.reloadData() /// Reload tableview with remaining data
     }

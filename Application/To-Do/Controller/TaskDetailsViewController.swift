@@ -32,6 +32,7 @@ class TaskDetailsViewController: UIViewController {
         super.viewDidLoad()
         endDatePicker = UIDatePicker()
         endDatePicker.addTarget(self, action: #selector(didPickDate(_:)), for: .valueChanged)
+        endDatePicker.minimumDate = Date()
         endDateTextField.inputView = endDatePicker
         dateFormatter.dateStyle = .medium
         subTasksTextView.addBorder()

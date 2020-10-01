@@ -36,8 +36,8 @@ class TaskDetailsViewController: UIViewController {
         dateFormatter.dateStyle = .medium
         subTasksTextView.addBorder()
         loadTaskForUpdate()
+        saveButton.title = (task == nil) ? "Add" : "Update"
     }
-    
     
     @IBAction func saveTapped(_ sender: UIBarButtonItem) {
         let task = createTaskBody()

@@ -27,9 +27,10 @@ class TaskDetailsViewController: UIViewController {
     var endDatePicker: UIDatePicker!
     var dateFormatter = DateFormatter()
     weak var delegate : TaskDelegate?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
+        view.addGestureRecognizer(tap)
         endDatePicker = UIDatePicker()
         endDatePicker.addTarget(self, action: #selector(didPickDate(_:)), for: .valueChanged)
         endDatePicker.minimumDate = Date()

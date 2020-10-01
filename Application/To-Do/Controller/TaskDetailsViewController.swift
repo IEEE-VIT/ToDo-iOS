@@ -29,8 +29,6 @@ class TaskDetailsViewController: UIViewController {
     weak var delegate : TaskDelegate?
     override func viewDidLoad() {
         super.viewDidLoad()
-        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
-        view.addGestureRecognizer(tap)
         endDatePicker = UIDatePicker()
         endDatePicker.addTarget(self, action: #selector(didPickDate(_:)), for: .valueChanged)
         endDatePicker.minimumDate = Date()
@@ -39,6 +37,9 @@ class TaskDetailsViewController: UIViewController {
         subTasksTextView.addBorder()
         loadTaskForUpdate()
         saveButton.title = (task == nil) ? "Add" : "Update"
+        // Tap outside to close the keybord
+        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
+        view.addGestureRecognizer(tap)
     }
     
     @IBAction func saveTapped(_ sender: UIBarButtonItem) {

@@ -36,18 +36,7 @@ class TaskDetailsViewController: UIViewController {
         dateFormatter.dateStyle = .medium
         subTasksTextView.addBorder()
         loadTaskForUpdate()
-        setupNavigationBarTitle()
-    }
-    
-    // function that `sets navigation bar button item title`
-    /// If task is nil then we are adding new task
-    /// If task is not nil then we are updating new task
-    private func setupNavigationBarTitle() {
-        if task == nil {
-            self.saveButton.title = "Add"
-        } else {
-            self.saveButton.title = "Update"
-        }
+        saveButton.title = (task == nil) ? "Add" : "Update"
     }
     
     @IBAction func saveTapped(_ sender: UIBarButtonItem) {
@@ -85,6 +74,12 @@ class TaskDetailsViewController: UIViewController {
     /// `Dateformatter` is used to convert `Date` to `String`
     @objc func didPickDate(_ sender: UIDatePicker) {
         let selectedDate = sender.date
+        
+        // Properties added for date formatting
+        dateFormatter.amSymbol = "am"
+        dateFormatter.pmSymbol = "pm"
+        dateFormatter.dateFormat = "dd MMMM yyyy hh:mm a"
+        
         endDate = dateFormatter.string(from: selectedDate)
         endDateTextField.text = endDate
     }

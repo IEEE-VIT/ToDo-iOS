@@ -25,7 +25,7 @@ class TaskDetailsViewController: UIViewController {
     var task : Task? = nil
     var endDate : String = ""
     var endDatePicker: UIDatePicker!
-    var dateFormatter = DateFormatter()
+    var dateFormatter: DateFormatter = DateFormatter()
     weak var delegate : TaskDelegate?
     
     override func viewDidLoad() {
@@ -74,9 +74,11 @@ class TaskDetailsViewController: UIViewController {
     /// function is called when `Date is changed`
     /// `Dateformatter` is used to convert `Date` to `String`
     @objc func didPickDate(_ sender: UIDatePicker) {
+        dateFormatter.dateFormat = "MM/dd/yyyy hh:mm a"
         let selectedDate = sender.date
         endDate = dateFormatter.string(from: selectedDate)
         endDateTextField.text = endDate
+
     }
     
 }

@@ -9,51 +9,6 @@
 import UIKit
 import CoreData
 
-enum SortTypesAvailable: CaseIterable {
-    case sortByNameAsc
-    case sortByNameDesc
-    case sortByDateAsc
-    case sortByDateDesc
-    
-    func getTitleForSortType() -> String {
-        var titleString = ""
-        switch self {
-        case .sortByNameAsc:
-            titleString = "Sort By Name (A-Z)"
-        case .sortByNameDesc:
-            titleString = "Sort By Name (Z-A)"
-        case .sortByDateAsc:
-            titleString = "Sort By Date (Earliest first)"
-        case .sortByDateDesc:
-            titleString = "Sort By Date (Latest first)"
-        }
-        return titleString
-    }
-    
-    func getSortClosure() -> ((Task, Task) -> Bool) {
-        var sortClosure: (Task, Task) -> Bool
-        switch self {
-        case .sortByNameAsc:
-            sortClosure = { (task1, task2) in
-                task1.title < task2.title
-            }
-        case .sortByNameDesc:
-            sortClosure = { (task1, task2) in
-                task1.title > task2.title
-            }
-        case .sortByDateAsc:
-            sortClosure = { (task1, task2) in
-                task1.dueDate < task2.dueDate
-            }
-        case .sortByDateDesc:
-            sortClosure = { (task1, task2) in
-                task1.dueDate > task2.dueDate
-            }
-        }
-        return sortClosure
-    }
-}
-
 class TodoViewController: UITableViewController {
     
     /// `Tableview` to display list of tasks
@@ -173,7 +128,7 @@ class TodoViewController: UITableViewController {
         } catch {
             print(error.localizedDescription)
         }
-        tableView.reloadData()
+        sortListAndReload()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -280,6 +235,7 @@ extension TodoViewController : TaskDelegate{
             todoList.removeLast()
             print(error.localizedDescription)
         }
+        sortListAndReload()
     }
     
     func didTapUpdate(task: Task) {

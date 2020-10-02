@@ -4,7 +4,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
-        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -149,9 +148,8 @@
                                                     </subviews>
                                                 </stackView>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Vt6-Tu-Oxt">
-                                                    <rect key="frame" x="331" y="22" width="37" height="20"/>
+                                                    <rect key="frame" x="331" y="7.5" width="37" height="50"/>
                                                     <color key="tintColor" red="1" green="0.88523057959999996" blue="0.25277458479999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                                    <imageReference key="image" image="star.fill" catalog="system" renderingMode="template"/>
                                                 </imageView>
                                             </subviews>
                                             <constraints>
@@ -237,7 +235,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="star.fill" catalog="system" width="128" height="116"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

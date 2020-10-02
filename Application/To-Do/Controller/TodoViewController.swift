@@ -18,7 +18,7 @@ class TodoViewController: UITableViewController {
     
     /// `ResultsController` to display results of specific search
     var resultsTableController: ResultsTableController!
-       
+    
     /// `DataSource` for todoTableview
     var todoList : [Task] = []
     var lastIndexTapped : Int = 0
@@ -50,6 +50,8 @@ class TodoViewController: UITableViewController {
     /// function called when `Star Task` tapped
     func starTask(at index : Int){
         //TODO: write star login
+        todoList[index].isFavourite = todoList[index].isFavourite ? false : true
+        tableView.reloadData()
     }
     
     ///Delete task
@@ -88,10 +90,11 @@ class TodoViewController: UITableViewController {
     
     /// function  to determine `tableview cell` at a given row
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: todoCellReuseIdentifier)
+        let cell = tableView.dequeueReusableCell(withIdentifier: todoCellReuseIdentifier, for: indexPath) as! TaskCell
         let task = todoList[indexPath.row]
-        cell.textLabel?.text = task.title
-        cell.detailTextLabel?.text = task.dueDate
+        cell.title.text = task.title
+        cell.subtitle.text = task.dueDate
+        cell.starImage.isHidden = todoList[indexPath.row].isFavourite ? false : true
         return cell
     }
     
@@ -110,13 +113,13 @@ class TodoViewController: UITableViewController {
         let delete = UIContextualAction(style: .destructive, title: "Delete") {  (_, _, _) in
             self.deleteTask(at: indexPath.row)
         }
-        let star = UIContextualAction(style: .normal, title: "Star") {  (_, _, _) in
+        let star = UIContextualAction(style: .normal, title: todoList[indexPath.row].isFavourite ? "Unstar" : "Star"){  (_, _, _) in
             self.starTask(at: indexPath.row)
         }
         star.backgroundColor = .orange
         
         let swipeActions = UISwipeActionsConfiguration(actions: [delete,star])
-
+        
         return swipeActions
     }
     

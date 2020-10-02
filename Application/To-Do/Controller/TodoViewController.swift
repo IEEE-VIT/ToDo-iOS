@@ -8,6 +8,51 @@
 
 import UIKit
 
+enum SortTypesAvailable: CaseIterable {
+    case sortByNameAsc
+    case sortByNameDesc
+    case sortByDateAsc
+    case sortByDateDesc
+    
+    func getTitleForSortType() -> String {
+        var titleString = ""
+        switch self {
+        case .sortByNameAsc:
+            titleString = "Sort By Name (A-Z)"
+        case .sortByNameDesc:
+            titleString = "Sort By Name (Z-A)"
+        case .sortByDateAsc:
+            titleString = "Sort By Date (Earliest first)"
+        case .sortByDateDesc:
+            titleString = "Sort By Date (Latest first)"
+        }
+        return titleString
+    }
+    
+    func getSortClosure() -> ((Task, Task) -> Bool) {
+        var sortClosure: (Task, Task) -> Bool
+        switch self {
+        case .sortByNameAsc:
+            sortClosure = { (task1, task2) in
+                task1.title < task2.title
+            }
+        case .sortByNameDesc:
+            sortClosure = { (task1, task2) in
+                task1.title > task2.title
+            }
+        case .sortByDateAsc:
+            sortClosure = { (task1, task2) in
+                task1.dueDate < task2.dueDate
+            }
+        case .sortByDateDesc:
+            sortClosure = { (task1, task2) in
+                task1.dueDate > task2.dueDate
+            }
+        }
+        return sortClosure
+    }
+}
+
 class TodoViewController: UITableViewController {
     
     /// `Tableview` to display list of tasks
@@ -29,6 +74,8 @@ class TodoViewController: UITableViewController {
     /// `Segue Identifier` to go to TaskDetailsViewController
     let taskDetailsIdentifier = "gototask"
     
+    var currentSelectedSortType: SortTypesAvailable = .sortByNameAsc
+    
     //MARK: View lifecycle methods
     override func viewDidLoad() {
         setupSearchController()
@@ -45,6 +92,11 @@ class TodoViewController: UITableViewController {
     @IBAction func addTasksTapped(_ sender: UIBarButtonItem) {
         performSegue(withIdentifier: taskDetailsIdentifier, sender: Any?.self)
     }
+    
+    @IBAction func sortButtonTapped(_ sender: UIBarButtonItem) {
+        showSortAlertController()
+    }
+    
     
     ///Star task
     /// function called when `Star Task` tapped
@@ -164,5 +216,30 @@ extension TodoViewController: UISearchControllerDelegate, UISearchResultsUpdatin
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         tableView.reloadData()
+    }
+}
+
+// MARK:- Sort functionality
+extension TodoViewController {
+    
+    func showSortAlertController() {
+        let alertController = UIAlertController(title: nil, message: "Choose sort type", preferredStyle: .actionSheet)
+        
+        SortTypesAvailable.allCases.forEach { (sortType) in
+            let action = UIAlertAction(title: sortType.getTitleForSortType(), style: .default) { (_) in
+                self.currentSelectedSortType = sortType
+                self.sortListAndReload()
+            }
+            alertController.addAction(action)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true)
+    }
+    
+    func sortListAndReload() {
+        todoList.sort(by: currentSelectedSortType.getSortClosure())
+        self.tableView.reloadData()
     }
 }

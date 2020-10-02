@@ -25,10 +25,13 @@ class TaskDetailsViewController: UIViewController{
     var task : Task? = nil
     var endDate : String = ""
     var endDatePicker: UIDatePicker!
-    var dateFormatter = DateFormatter()
+    var dateFormatter: DateFormatter = DateFormatter()
     weak var delegate : TaskDelegate?
+    var isUpdate: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        isUpdate = (task != nil)
         endDatePicker = UIDatePicker()
         endDatePicker.addTarget(self, action: #selector(didPickDate(_:)), for: .valueChanged)
         endDatePicker.minimumDate = Date()
@@ -36,16 +39,18 @@ class TaskDetailsViewController: UIViewController{
         dateFormatter.dateStyle = .medium
         subTasksTextView.addBorder()
         loadTaskForUpdate()
-        saveButton.title = (task == nil) ? "Add" : "Update"
         taskTitleTextField.delegate = self
         // Tap outside to close the keybord
         let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
         view.addGestureRecognizer(tap)
+        saveButton.title = isUpdate ? "Update" : "Add"
     }
     
     @IBAction func saveTapped(_ sender: UIBarButtonItem) {
-        let task = createTaskBody()
-        let isUpdate = (self.task != nil)
+        guard let task = createTaskBody() else {
+            self.navigationController?.popViewController(animated: true)
+            return
+        }
         if isUpdate {
             self.delegate?.didTapUpdate(task: task)
         } else {
@@ -58,10 +63,17 @@ class TaskDetailsViewController: UIViewController{
     /// Title: String taken from `taskTitleTextField`
     /// Subtask: String taken from `subTasksTextView`
     /// endDate : String taken from `didPickDate method`
-    func createTaskBody()->Task{
+    func createTaskBody()->Task?{
         let title = taskTitleTextField.text ?? ""
         let subtask = subTasksTextView.text ?? ""
-        let task = Task(dueDate: endDate,labels: [],subTasks: subtask, title: title)
+        /// check if we are updating the task or creatiing the task
+        if self.task == nil {
+            let mainController = self.delegate as! TodoViewController
+            self.task = Task(context: mainController.moc)
+        }
+        task?.title = title
+        task?.subTasks = subtask
+        task?.dueDate = endDate
         return task
     }
     
@@ -77,9 +89,11 @@ class TaskDetailsViewController: UIViewController{
     /// function is called when `Date is changed`
     /// `Dateformatter` is used to convert `Date` to `String`
     @objc func didPickDate(_ sender: UIDatePicker) {
+        dateFormatter.dateFormat = "MM/dd/yyyy hh:mm a"
         let selectedDate = sender.date
         endDate = dateFormatter.string(from: selectedDate)
         endDateTextField.text = endDate
+
     }
     
 }

@@ -13,7 +13,7 @@ protocol TaskDelegate: class {
     func didTapUpdate(task : Task)
 }
 
-class TaskDetailsViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
+class TaskDetailsViewController: UIViewController{
     
     // OUTLETS
     @IBOutlet weak var taskTitleTextField: UITextField!
@@ -38,7 +38,6 @@ class TaskDetailsViewController: UIViewController, UITextFieldDelegate, UITextVi
         loadTaskForUpdate()
         saveButton.title = (task == nil) ? "Add" : "Update"
         taskTitleTextField.delegate = self
-        taskTitleTextField.tag = 1
         // Tap outside to close the keybord
         let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
         view.addGestureRecognizer(tap)
@@ -84,14 +83,12 @@ class TaskDetailsViewController: UIViewController, UITextFieldDelegate, UITextVi
     }
     
 }
-extension TaskDetailsViewController {
-func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//Check if there is any other text-field in the view whose tag is +1 greater than the current text-field on which the return key was pressed. If yes → then move the cursor to that next text-field. If No → Dismiss the keyboard
-if let nextField = self.view.viewWithTag(textField.tag + 1) as? UITextField {
-nextField.becomeFirstResponder()
-} else {
-textField.resignFirstResponder()
-}
-return false
-}
+extension TaskDetailsViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == taskTitleTextField {
+            textField.resignFirstResponder()
+            return true
+        }
+        return false
+    }
 }

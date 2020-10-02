@@ -8,15 +8,15 @@
 
 import UIKit
 
-struct Task {
-    var dueDate : String
-    var isFavourite : Bool = false
-    var labels : [Label]
-    var subTasks : String
-    var title : String
-}
-
-struct Label {
-    let color : UIColor
-    let title : String
-}
+//struct Task {
+//    var dueDate : String
+//    var isFavourite : Bool = false
+//    var labels : [Label]
+//    var subTasks : String
+//    var title : String
+//}
+//
+//struct Label {
+//    let color : UIColor
+//    let title : String
+//}

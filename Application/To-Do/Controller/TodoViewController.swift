@@ -33,7 +33,6 @@ class TodoViewController: UITableViewController {
     override func viewDidLoad() {
         setupSearchController()
         super.viewDidLoad()
-        // TODO: initial setup if any
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -146,18 +145,14 @@ extension TodoViewController : TaskDelegate{
 extension TodoViewController: UISearchControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
     func updateSearchResults(for searchController: UISearchController) {
         /// perform search only when there is some text
-        if var text: String = searchController.searchBar.text, text.count > 0 {
-            var results: [Task] = []
-            text = text.lowercased()
-            todoList.forEach { (task) in
+        if let text: String = searchController.searchBar.text?.lowercased(), text.count > 0, let resultsController = searchController.searchResultsController as? ResultsTableController {
+            resultsController.todoList = todoList.filter({ (task) -> Bool in
                 if task.title.lowercased().contains(text) || task.subTasks.lowercased().contains(text) {
-                    results.append(task)
+                    return true
                 }
-            }
-            if let resultsController = searchController.searchResultsController as? ResultsTableController {
-                resultsController.todoList = results
-                resultsController.tableView.reloadData()
-            }
+                return false
+            })
+            resultsController.tableView.reloadData()
         } else {
             /// default case when text not available or text length is zero
             tableView.reloadData()

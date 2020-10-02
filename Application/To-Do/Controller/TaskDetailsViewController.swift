@@ -13,7 +13,7 @@ protocol TaskDelegate: class {
     func didTapUpdate(task : Task)
 }
 
-class TaskDetailsViewController: UIViewController {
+class TaskDetailsViewController: UIViewController{
     
     // OUTLETS
     @IBOutlet weak var taskTitleTextField: UITextField!
@@ -39,6 +39,10 @@ class TaskDetailsViewController: UIViewController {
         dateFormatter.dateStyle = .medium
         subTasksTextView.addBorder()
         loadTaskForUpdate()
+        taskTitleTextField.delegate = self
+        // Tap outside to close the keybord
+        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
+        view.addGestureRecognizer(tap)
         saveButton.title = isUpdate ? "Update" : "Add"
     }
     
@@ -92,4 +96,13 @@ class TaskDetailsViewController: UIViewController {
 
     }
     
+}
+extension TaskDetailsViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == taskTitleTextField {
+            textField.resignFirstResponder()
+            return true
+        }
+        return false
+    }
 }

@@ -31,7 +31,7 @@ class TaskDetailsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        isUpdate = (task == nil) ? false : true
+        isUpdate = (task != nil)
         endDatePicker = UIDatePicker()
         endDatePicker.addTarget(self, action: #selector(didPickDate(_:)), for: .valueChanged)
         endDatePicker.minimumDate = Date()
@@ -39,7 +39,7 @@ class TaskDetailsViewController: UIViewController {
         dateFormatter.dateStyle = .medium
         subTasksTextView.addBorder()
         loadTaskForUpdate()
-        saveButton.title = !isUpdate ? "Add" : "Update"
+        saveButton.title = isUpdate ? "Update" : "Add"
     }
     
     @IBAction func saveTapped(_ sender: UIBarButtonItem) {

@@ -210,7 +210,7 @@ extension TodoViewController: NSFetchedResultsControllerDelegate {
         case .update:
             tableView.reloadRows(at: [indexPath!], with: .fade)
         case .move:
-            tableView.moveRow(at: indexPath!, to: newIndexPath!)
+            break
         @unknown default:
             break
         }
@@ -228,7 +228,6 @@ extension TodoViewController : TaskDelegate{
             todoList.removeLast()
             print(error.localizedDescription)
         }
-        tableView.reloadData() /// Reload tableview with new data
     }
     
     func didTapUpdate(task: Task) {

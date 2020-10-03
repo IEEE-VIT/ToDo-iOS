@@ -104,6 +104,12 @@ class TodoViewController: UITableViewController {
         updateTask()
     }
     
+    func checkTask(at index : Int){
+        //TODO: write star login
+        todoList[index].isDone = todoList[index].isDone ? false : true
+        updateTask()
+    }
+    
     ///Delete task
     /// function called when `Delete Task` tapped
     func deleteTask(at index : Int){
@@ -164,6 +170,7 @@ class TodoViewController: UITableViewController {
         cell.title.text = task.title
         cell.subtitle.text = task.dueDate
         cell.starImage.isHidden = todoList[indexPath.row].isFavourite ? false : true
+        cell.checkImage.isHidden = todoList[indexPath.row].isDone ? false : true
         return cell
     }
     
@@ -179,15 +186,25 @@ class TodoViewController: UITableViewController {
     
     /// `UISwipeActionsConfiguration` for delete and star  buttons
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
         let delete = UIContextualAction(style: .destructive, title: "Delete") {  (_, _, _) in
             self.deleteTask(at: indexPath.row)
         }
+        
+        
         let star = UIContextualAction(style: .normal, title: todoList[indexPath.row].isFavourite ? "Unstar" : "Star"){  (_, _, _) in
             self.starTask(at: indexPath.row)
         }
         star.backgroundColor = .orange
         
-        let swipeActions = UISwipeActionsConfiguration(actions: [delete,star])
+        
+        let status = UIContextualAction(style: .normal, title: todoList[indexPath.row].isDone ? "Ongoing" : "Done"){  (_, _, _) in
+            self.checkTask(at: indexPath.row)
+        }
+        status.backgroundColor = UIColor.systemBlue
+  
+        
+        let swipeActions = UISwipeActionsConfiguration(actions: [delete,star,status])
         
         return swipeActions
     }

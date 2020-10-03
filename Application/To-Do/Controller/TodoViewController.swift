@@ -32,8 +32,6 @@ class TodoViewController: UITableViewController {
     /// default fetch request for tasks
     lazy var defaultFetchRequest: NSFetchRequest<Task> = {
         let fetchRequest : NSFetchRequest<Task> = Task.fetchRequest()
-        let sort = NSSortDescriptor(key: "title", ascending: true)
-        fetchRequest.sortDescriptors = [sort]
         return fetchRequest
     }()
     
@@ -65,6 +63,7 @@ class TodoViewController: UITableViewController {
         }
         let persistenceContainer = appDelegate.persistentContainer
         moc = persistenceContainer.viewContext
+        defaultFetchRequest.sortDescriptors = currentSelectedSortType.getSortDescriptor()
         setupFetchedResultsController(fetchRequest: defaultFetchRequest)
         /// reloading the table view with the fetched objects
         if let objects = fetchedResultsController.fetchedObjects {
@@ -128,7 +127,7 @@ class TodoViewController: UITableViewController {
         } catch {
             print(error.localizedDescription)
         }
-        sortListAndReload()
+        loadData()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -235,7 +234,7 @@ extension TodoViewController : TaskDelegate{
             todoList.removeLast()
             print(error.localizedDescription)
         }
-        sortListAndReload()
+        loadData()
     }
     
     func didTapUpdate(task: Task) {
@@ -283,7 +282,7 @@ extension TodoViewController {
         SortTypesAvailable.allCases.forEach { (sortType) in
             let action = UIAlertAction(title: sortType.getTitleForSortType(), style: .default) { (_) in
                 self.currentSelectedSortType = sortType
-                self.sortListAndReload()
+                self.loadData()
             }
             alertController.addAction(action)
         }
@@ -291,10 +290,5 @@ extension TodoViewController {
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
         self.present(alertController, animated: true)
-    }
-    
-    func sortListAndReload() {
-        todoList.sort(by: currentSelectedSortType.getSortClosure())
-        self.tableView.reloadData()
     }
 }

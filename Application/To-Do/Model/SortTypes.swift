@@ -29,32 +29,16 @@ enum SortTypesAvailable: CaseIterable {
         return titleString
     }
     
-    func getSortClosure() -> ((Task, Task) -> Bool) {
-        var sortClosure: (Task, Task) -> Bool
+    func getSortDescriptor() -> [NSSortDescriptor] {
         switch self {
         case .sortByNameAsc:
-            sortClosure = { (task1, task2) in
-                if let firstTitle = task1.title, let secondTitle = task2.title {
-                    return firstTitle < secondTitle
-                }
-                return false
-            }
+            return [NSSortDescriptor(key: "title", ascending: true)]
         case .sortByNameDesc:
-            sortClosure = { (task1, task2) in
-                if let firstTitle = task1.title, let secondTitle = task2.title {
-                    return firstTitle > secondTitle
-                }
-                return false
-            }
+            return [NSSortDescriptor(key: "title", ascending: false)]
         case .sortByDateAsc:
-            sortClosure = { (task1, task2) in
-                return task1.dueDateTimeStamp < task2.dueDateTimeStamp
-            }
+            return [NSSortDescriptor(key: "dueDateTimeStamp", ascending: true)]
         case .sortByDateDesc:
-            sortClosure = { (task1, task2) in
-                return task1.dueDateTimeStamp > task2.dueDateTimeStamp
-            }
+            return [NSSortDescriptor(key: "dueDateTimeStamp", ascending: false)]
         }
-        return sortClosure
     }
 }

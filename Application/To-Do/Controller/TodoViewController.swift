@@ -47,6 +47,9 @@ class TodoViewController: UITableViewController {
     override func viewDidLoad() {
         setupSearchController()
         super.viewDidLoad()
+        
+        showOnboardingIfNeeded()
+        
         /// Core data setup and population
         loadData()
     }
@@ -134,6 +137,20 @@ class TodoViewController: UITableViewController {
         if let taskDetailVC = segue.destination as? TaskDetailsViewController{
             taskDetailVC.delegate = self
             taskDetailVC.task = sender as? Task
+        }
+    }
+    
+    /// onboarding setup
+    fileprivate func showOnboardingIfNeeded() {
+        guard let onboardingController =
+                self.storyboard?.instantiateViewController(identifier: "OnboardingViewController") as? OnboardingViewController else {
+            return
+        }
+
+        if !onboardingController.alreadyShown() {
+            DispatchQueue.main.async {
+                self.present(onboardingController, animated: true)
+            }
         }
     }
     

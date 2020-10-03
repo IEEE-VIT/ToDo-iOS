@@ -32,8 +32,6 @@ class TodoViewController: UITableViewController {
     /// default fetch request for tasks
     lazy var defaultFetchRequest: NSFetchRequest<Task> = {
         let fetchRequest : NSFetchRequest<Task> = Task.fetchRequest()
-        let sort = NSSortDescriptor(key: "title", ascending: true)
-        fetchRequest.sortDescriptors = [sort]
         return fetchRequest
     }()
     
@@ -42,6 +40,8 @@ class TodoViewController: UITableViewController {
     
     /// `Segue Identifier` to go to TaskDetailsViewController
     let taskDetailsIdentifier = "gototask"
+    
+    var currentSelectedSortType: SortTypesAvailable = .sortByNameAsc
     
     //MARK: View lifecycle methods
     override func viewDidLoad() {
@@ -63,6 +63,7 @@ class TodoViewController: UITableViewController {
         }
         let persistenceContainer = appDelegate.persistentContainer
         moc = persistenceContainer.viewContext
+        defaultFetchRequest.sortDescriptors = currentSelectedSortType.getSortDescriptor()
         setupFetchedResultsController(fetchRequest: defaultFetchRequest)
         /// reloading the table view with the fetched objects
         if let objects = fetchedResultsController.fetchedObjects {
@@ -89,6 +90,11 @@ class TodoViewController: UITableViewController {
     @IBAction func addTasksTapped(_ sender: UIBarButtonItem) {
         performSegue(withIdentifier: taskDetailsIdentifier, sender: Any?.self)
     }
+    
+    @IBAction func sortButtonTapped(_ sender: UIBarButtonItem) {
+        showSortAlertController()
+    }
+    
     
     ///Star task
     /// function called when `Star Task` tapped
@@ -121,7 +127,7 @@ class TodoViewController: UITableViewController {
         } catch {
             print(error.localizedDescription)
         }
-        tableView.reloadData()
+        loadData()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -228,6 +234,7 @@ extension TodoViewController : TaskDelegate{
             todoList.removeLast()
             print(error.localizedDescription)
         }
+        loadData()
     }
     
     func didTapUpdate(task: Task) {
@@ -263,5 +270,25 @@ extension TodoViewController: UISearchControllerDelegate, UISearchResultsUpdatin
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         tableView.reloadData()
+    }
+}
+
+// MARK:- Sort functionality
+extension TodoViewController {
+    
+    func showSortAlertController() {
+        let alertController = UIAlertController(title: nil, message: "Choose sort type", preferredStyle: .actionSheet)
+        
+        SortTypesAvailable.allCases.forEach { (sortType) in
+            let action = UIAlertAction(title: sortType.getTitleForSortType(), style: .default) { (_) in
+                self.currentSelectedSortType = sortType
+                self.loadData()
+            }
+            alertController.addAction(action)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true)
     }
 }

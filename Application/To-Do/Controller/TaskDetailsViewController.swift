@@ -28,6 +28,7 @@ class TaskDetailsViewController: UIViewController{
     var dateFormatter: DateFormatter = DateFormatter()
     weak var delegate : TaskDelegate?
     var isUpdate: Bool = false
+    var selectedDateTimeStamp: Double?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,6 +75,7 @@ class TaskDetailsViewController: UIViewController{
         task?.title = title
         task?.subTasks = subtask
         task?.dueDate = endDate
+        task?.dueDateTimeStamp = selectedDateTimeStamp ?? 0
         return task
     }
     
@@ -91,6 +93,7 @@ class TaskDetailsViewController: UIViewController{
     @objc func didPickDate(_ sender: UIDatePicker) {
         dateFormatter.dateFormat = "MM/dd/yyyy hh:mm a"
         let selectedDate = sender.date
+        self.selectedDateTimeStamp = sender.date.timeIntervalSince1970
         endDate = dateFormatter.string(from: selectedDate)
         endDateTextField.text = endDate
 

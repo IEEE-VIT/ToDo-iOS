@@ -66,11 +66,23 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="0Xn-wE-QcT">
+                                <rect key="frame" x="20" y="514" width="374" height="32"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <segments>
+                                    <segment title="Low"/>
+                                    <segment title="Medium"/>
+                                    <segment title="High"/>
+                                </segments>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="selectedSegmentTintColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="SOr-LH-5cU" firstAttribute="top" secondItem="ngX-g4-4zR" secondAttribute="bottom" constant="8" id="1Cj-bc-dHP"/>
                             <constraint firstItem="SOr-LH-5cU" firstAttribute="leading" secondItem="7AC-Jy-fo4" secondAttribute="leading" constant="20" id="5J7-D1-tUG"/>
+                            <constraint firstItem="0Xn-wE-QcT" firstAttribute="top" secondItem="0O5-ye-SqQ" secondAttribute="bottom" constant="30" id="9Pj-Rl-Gn9"/>
                             <constraint firstItem="7AC-Jy-fo4" firstAttribute="trailing" secondItem="SOr-LH-5cU" secondAttribute="trailing" constant="20" id="DOt-QU-SnB"/>
                             <constraint firstItem="0O5-ye-SqQ" firstAttribute="leading" secondItem="7AC-Jy-fo4" secondAttribute="leading" constant="20" id="Frh-tw-mW9"/>
                             <constraint firstItem="oGd-cS-aUS" firstAttribute="leading" secondItem="7AC-Jy-fo4" secondAttribute="leading" constant="20" id="Gag-U9-qOU"/>
@@ -79,14 +91,17 @@
                             <constraint firstItem="7AC-Jy-fo4" firstAttribute="trailing" secondItem="DYv-OP-cPx" secondAttribute="trailing" constant="20" id="L2e-hg-zT9"/>
                             <constraint firstItem="ngX-g4-4zR" firstAttribute="leading" secondItem="7AC-Jy-fo4" secondAttribute="leading" constant="20" id="Mw6-Fo-ypS"/>
                             <constraint firstItem="SOr-LH-5cU" firstAttribute="height" secondItem="IF7-jO-lyh" secondAttribute="height" multiplier="0.142857" id="Nob-xn-Xok"/>
+                            <constraint firstItem="7AC-Jy-fo4" firstAttribute="trailing" secondItem="0Xn-wE-QcT" secondAttribute="trailing" constant="20" id="Ycn-7O-oH3"/>
                             <constraint firstItem="7AC-Jy-fo4" firstAttribute="trailing" secondItem="0O5-ye-SqQ" secondAttribute="trailing" constant="20" id="bI4-Rp-KxC"/>
                             <constraint firstItem="oGd-cS-aUS" firstAttribute="top" secondItem="SOr-LH-5cU" secondAttribute="bottom" constant="30" id="dFp-6F-mhR"/>
                             <constraint firstItem="DYv-OP-cPx" firstAttribute="top" secondItem="aD0-wr-4cR" secondAttribute="bottom" constant="15" id="eEh-pK-aPF"/>
                             <constraint firstItem="DYv-OP-cPx" firstAttribute="leading" secondItem="7AC-Jy-fo4" secondAttribute="leading" constant="20" id="hE3-p2-asy"/>
+                            <constraint firstItem="0Xn-wE-QcT" firstAttribute="leading" secondItem="7AC-Jy-fo4" secondAttribute="leading" constant="20" id="j3P-Yn-l3d"/>
                             <constraint firstItem="7AC-Jy-fo4" firstAttribute="trailing" secondItem="oGd-cS-aUS" secondAttribute="trailing" constant="20" id="jpH-bL-1Q0"/>
                             <constraint firstItem="7AC-Jy-fo4" firstAttribute="trailing" secondItem="aD0-wr-4cR" secondAttribute="trailing" constant="30" id="lHC-Rd-gGU"/>
                             <constraint firstItem="ngX-g4-4zR" firstAttribute="top" secondItem="DYv-OP-cPx" secondAttribute="bottom" constant="30" id="lTp-7P-vq2"/>
                             <constraint firstItem="aD0-wr-4cR" firstAttribute="top" secondItem="7AC-Jy-fo4" secondAttribute="top" constant="30" id="mO8-ND-JXo"/>
+                            <constraint firstItem="7AC-Jy-fo4" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="0Xn-wE-QcT" secondAttribute="bottom" constant="30" id="rvb-hS-cxx"/>
                             <constraint firstItem="aD0-wr-4cR" firstAttribute="leading" secondItem="7AC-Jy-fo4" secondAttribute="leading" constant="20" id="yJH-LP-vqT"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="7AC-Jy-fo4"/>
@@ -100,6 +115,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="endDateTextField" destination="0O5-ye-SqQ" id="f9x-Mx-5Yb"/>
+                        <outlet property="prioritySegmentedControl" destination="0Xn-wE-QcT" id="Ts9-3V-LNr"/>
                         <outlet property="saveButton" destination="Zfe-d1-cWG" id="CS6-gQ-3b9"/>
                         <outlet property="subTasksTextView" destination="SOr-LH-5cU" id="Tgd-o5-RzQ"/>
                         <outlet property="taskTitleTextField" destination="DYv-OP-cPx" id="sKT-Si-kZi"/>

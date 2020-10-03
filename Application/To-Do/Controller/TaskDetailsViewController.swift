@@ -20,6 +20,7 @@ class TaskDetailsViewController: UIViewController{
     @IBOutlet weak var subTasksTextView: UITextView!
     @IBOutlet weak var endDateTextField: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBOutlet weak var prioritySegmentedControl: UISegmentedControl!
     
     // VARIABLES
     var task : Task? = nil

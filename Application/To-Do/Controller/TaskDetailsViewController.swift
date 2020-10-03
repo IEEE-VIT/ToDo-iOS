@@ -48,6 +48,7 @@ class TaskDetailsViewController: UIViewController{
     }
     
     @IBAction func saveTapped(_ sender: UIBarButtonItem) {
+        if !isValidTask() { return }
         guard let task = createTaskBody() else {
             self.navigationController?.popViewController(animated: true)
             return
@@ -58,6 +59,22 @@ class TaskDetailsViewController: UIViewController{
             self.delegate?.didTapSave(task: task)
         }
         self.navigationController?.popViewController(animated: true)
+    }
+
+    /// Function that determines if a task is valid or not. A valid task has both a title and due date.
+    /// Title: String taken from `taskTitleTextField`
+    /// endDate : String taken from `endDueDateTextField`
+    /// - Returns: A bool whether or not the task is valid.
+    func isValidTask() -> Bool {
+        if taskTitleTextField.text!.isEmpty {
+            Alert.showNoTaskTitle(on: self)
+            return false
+        }else if endDateTextField.text!.isEmpty {
+            Alert.showNoTaskDueDate(on: self)
+            return false
+        } else {
+            return true
+        }
     }
     
     // function that `Creates Task body`

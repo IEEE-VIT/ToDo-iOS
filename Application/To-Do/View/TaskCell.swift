@@ -14,6 +14,7 @@ class TaskCell: UITableViewCell {
     @IBOutlet weak var subtitle: UILabel!
     @IBOutlet weak var starImage: UIImageView!
     @IBOutlet weak var priorityImage: UIImageView!
+    @IBOutlet weak var starImageWidthConstraint: NSLayoutConstraint!
     
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -4,7 +4,7 @@
 //
 //  Created by Adriana González Martínez on 10/2/20.
 //  Copyright © 2020 Aaryan Kothari. All rights reserved.
-//
+//  This is not for copying and if you want, then you have get its license agrrement
 
 import UIKit
 

@@ -163,7 +163,10 @@ class TodoViewController: UITableViewController {
         let task = todoList[indexPath.row]
         cell.title.text = task.title
         cell.subtitle.text = task.dueDate
-        cell.starImage.isHidden = todoList[indexPath.row].isFavourite ? false : true
+        /// width adjustment of starImage
+        cell.starImageWidthConstraint.constant = todoList[indexPath.row].isFavourite ? 32 : 0
+        let priority: Priority = Priority(rawValue: task.priority ?? "") ?? Priority.low
+        cell.priorityImage.image = priority.getImageForPriority()
         return cell
     }
     

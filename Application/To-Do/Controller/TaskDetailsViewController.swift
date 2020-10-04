@@ -20,6 +20,7 @@ class TaskDetailsViewController: UIViewController{
     @IBOutlet weak var subTasksTextView: UITextView!
     @IBOutlet weak var endDateTextField: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBOutlet weak var prioritySegmentedControl: UISegmentedControl!
     
     // VARIABLES
     var task : Task? = nil
@@ -93,6 +94,7 @@ class TaskDetailsViewController: UIViewController{
         task?.subTasks = subtask
         task?.dueDate = endDate
         task?.dueDateTimeStamp = selectedDateTimeStamp ?? 0
+        task?.priority = Priority.getPriorityByIndex(index: prioritySegmentedControl.selectedSegmentIndex).rawValue
         return task
     }
     
@@ -102,6 +104,8 @@ class TaskDetailsViewController: UIViewController{
         taskTitleTextField.text = task.title
         subTasksTextView.text = task.subTasks
         endDateTextField.text = task.dueDate
+        let priority: Priority = Priority(rawValue: task.priority ?? "") ?? Priority.low
+        prioritySegmentedControl.selectedSegmentIndex = priority.getPriorityIndex()
     }
     
     // IBOUTLET for datepicker

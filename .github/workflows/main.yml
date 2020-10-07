@@ -13,7 +13,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Testing
+      - name: Switch to Xcode 12
+        run: sudo xcode-select -s /Applications/Xcode_12.app
+      - name: Build
+        env: 
+          PROJECT: To-Do.xcodeproj
+          SCHEME: To-Do
+          DESTINATION: platform=iOS Simulator,OS=14.0,name=iPhone 11
         run: |
           cd Application
-          xcodebuild clean build -project To-Do.xcodeproj -scheme To-Do -sdk iphonesimulator -destination"platform=iOS Simulator,OS=13.1,name=iPhone 8" ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO
+          xcodebuild -project "$PROJECT" -scheme "$SCHEME" -destination "$DESTINATION" -configuration Release clean test CODE_SIGNING_ALLOWED=NO | xcpretty

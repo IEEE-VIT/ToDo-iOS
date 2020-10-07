@@ -13,6 +13,7 @@ class TodoViewController: UITableViewController {
     
     /// `Tableview` to display list of tasks
     @IBOutlet weak var todoTableView: UITableView!
+    @IBOutlet weak var sortButton: UIBarButtonItem!
     
     /// `SearchController` to include search bar
     var searchController: UISearchController!
@@ -171,6 +172,7 @@ class TodoViewController: UITableViewController {
     
     /// function to determine `Number of rows` in tableview
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        self.sortButton.isEnabled = self.todoList.count > 0 
         return todoList.count
     }
     

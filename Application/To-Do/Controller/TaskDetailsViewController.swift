@@ -99,12 +99,7 @@ class TaskDetailsViewController: UIViewController{
     
     func loadTaskForUpdate(){
         guard let task = self.task else {
-            // Set placeholder texts when adding new task
-            subTasksTextView.textColor = .lightGray
-            subTasksTextView.delegate = self
-            subTasksTextView.text = "Enter your subtasks here"
-            taskTitleTextField.placeholder = "Enter task name"
-            endDateTextField.placeholder = "Select end date"
+            subTasksTextView.textColor = .placeholderText
             return
         }
         taskTitleTextField.text = task.title
@@ -135,7 +130,7 @@ extension TaskDetailsViewController: UITextFieldDelegate, UITextViewDelegate {
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == .lightGray {
+        if textView.textColor == .placeholderText {
             textView.text = nil
             textView.textColor = .black
         }
@@ -144,7 +139,7 @@ extension TaskDetailsViewController: UITextFieldDelegate, UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
             textView.text = "Enter your subtasks here"
-            textView.textColor = .lightGray
+            textView.textColor = .placeholderText
         }
     }
 }

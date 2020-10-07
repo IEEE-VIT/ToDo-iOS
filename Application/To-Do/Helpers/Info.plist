@@ -60,5 +60,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+    <key>NSCameraUsageDescription</key>
+    <string>A picture is worth a thousand words</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>A picture is worth a thousand words</string>
 </dict>
 </plist>

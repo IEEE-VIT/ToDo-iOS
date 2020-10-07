@@ -20,6 +20,8 @@ class TaskDetailsViewController: UIViewController{
     @IBOutlet weak var subTasksTextView: UITextView!
     @IBOutlet weak var endDateTextField: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBOutlet weak var attachmentCollection: UICollectionView!
+    
     
     // VARIABLES
     var task : Task? = nil
@@ -29,6 +31,9 @@ class TaskDetailsViewController: UIViewController{
     weak var delegate : TaskDelegate?
     var isUpdate: Bool = false
     var selectedDateTimeStamp: Double?
+    var imagesAttached = [UIImage]()
+    
+    var cameraHelper = CameraHelper()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,6 +50,17 @@ class TaskDetailsViewController: UIViewController{
         let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
         view.addGestureRecognizer(tap)
         saveButton.title = isUpdate ? "Update" : "Add"
+    }
+    
+    @IBAction func addImageAttachment(_ sender: Any) {
+        // opening camera
+        cameraHelper.openCamera(in: self) { [weak self] image in
+            guard let image = image else { return }
+            
+            // Adding attachment
+            self?.imagesAttached.append(image)
+            self?.attachmentCollection.reloadData()
+        }
     }
     
     @IBAction func saveTapped(_ sender: UIBarButtonItem) {
@@ -93,6 +109,8 @@ class TaskDetailsViewController: UIViewController{
         task?.subTasks = subtask
         task?.dueDate = endDate
         task?.dueDateTimeStamp = selectedDateTimeStamp ?? 0
+        task?.attachments = try? NSKeyedArchiver.archivedData(withRootObject: imagesAttached, requiringSecureCoding: false)
+        
         return task
     }
     
@@ -102,6 +120,11 @@ class TaskDetailsViewController: UIViewController{
         taskTitleTextField.text = task.title
         subTasksTextView.text = task.subTasks
         endDateTextField.text = task.dueDate
+        
+        // Recover attachments
+        if let attachments = task.attachments {
+            imagesAttached = NSKeyedUnarchiver.unarchiveObject(with: attachments) as? [UIImage] ?? []
+        }
     }
     
     // IBOUTLET for datepicker
@@ -124,5 +147,28 @@ extension TaskDetailsViewController: UITextFieldDelegate {
             return true
         }
         return false
+    }
+}
+
+extension TaskDetailsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return imagesAttached.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let image = imagesAttached[indexPath.row]
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AttachmentCell", for: indexPath)
+        
+        if let imageCell = cell as? ImageAttachmentCell {
+            imageCell.imageView.image = image
+        }
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        debugPrint("Click: \(indexPath.row) \(imagesAttached[indexPath.row])")
     }
 }

@@ -116,7 +116,10 @@ class TaskDetailsViewController: UIViewController{
     
     
     func loadTaskForUpdate(){
-        guard let task = self.task else { return }
+        guard let task = self.task else {
+            subTasksTextView.textColor = .placeholderText
+            return
+        }
         taskTitleTextField.text = task.title
         subTasksTextView.text = task.subTasks
         endDateTextField.text = task.dueDate
@@ -140,13 +143,27 @@ class TaskDetailsViewController: UIViewController{
     }
     
 }
-extension TaskDetailsViewController: UITextFieldDelegate {
+extension TaskDetailsViewController: UITextFieldDelegate, UITextViewDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == taskTitleTextField {
             textField.resignFirstResponder()
             return true
         }
         return false
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == .placeholderText {
+            textView.text = nil
+            textView.textColor = .black
+        }
+    }
+        
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Enter your subtasks here"
+            textView.textColor = .placeholderText
+        }
     }
 }
 

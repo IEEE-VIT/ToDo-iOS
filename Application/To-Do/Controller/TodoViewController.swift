@@ -68,6 +68,7 @@ class TodoViewController: UITableViewController {
         let persistenceContainer = appDelegate.persistentContainer
         moc = persistenceContainer.viewContext
         defaultFetchRequest.sortDescriptors = currentSelectedSortType.getSortDescriptor()
+        defaultFetchRequest.predicate = NSPredicate(format: "isComplete = %d", false)
         setupFetchedResultsController(fetchRequest: defaultFetchRequest)
         /// reloading the table view with the fetched objects
         if let objects = fetchedResultsController.fetchedObjects {
@@ -121,6 +122,15 @@ class TodoViewController: UITableViewController {
             print(error.localizedDescription)
         }
         tableView.reloadData() /// Reload tableview with remaining data
+    }
+
+    /// Mark a task as complete and remove from the `tableView`
+    /// - Parameter index: Which task to mark as complete
+    func completeTask(at index : Int){
+        todoList[index].isComplete = true
+        todoList.remove(at: index) /// removes task at index
+        updateTask()
+        tableView.reloadData()
     }
     
     /// Update task
@@ -208,6 +218,17 @@ class TodoViewController: UITableViewController {
         
         let swipeActions = UISwipeActionsConfiguration(actions: [delete,star])
         
+        return swipeActions
+    }
+
+    /// `UISwipeActionsConfiguration` for completing a task
+    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let completeTask = UIContextualAction(style: .normal, title: "Complete") {  (_, _, _) in
+            self.completeTask(at: indexPath.row)
+        }
+        completeTask.backgroundColor = .systemGreen
+        let swipeActions = UISwipeActionsConfiguration(actions: [completeTask])
+
         return swipeActions
     }
     

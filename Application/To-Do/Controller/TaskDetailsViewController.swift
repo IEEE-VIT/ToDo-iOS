@@ -110,6 +110,7 @@ class TaskDetailsViewController: UIViewController{
         task?.dueDate = endDate
         task?.dueDateTimeStamp = selectedDateTimeStamp ?? 0
         task?.attachments = try? NSKeyedArchiver.archivedData(withRootObject: imagesAttached, requiringSecureCoding: false)
+        task?.isComplete = false
         
         return task
     }

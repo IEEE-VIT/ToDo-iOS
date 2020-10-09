@@ -49,7 +49,8 @@ class TaskTests: XCTestCase {
         subtasks: String? = nil,
         dueDate: String? = nil,
         dueDateTimeStamp: Double,
-        isFavourite: Bool = false
+        isFavourite: Bool = false,
+        isComplete: Bool = false
     ) -> Task? {
         let task = Task(context: mockPersistantContainer.viewContext)
         task.title = title
@@ -57,6 +58,7 @@ class TaskTests: XCTestCase {
         task.dueDate = dueDate
         task.isFavourite = isFavourite
         task.dueDateTimeStamp = dueDateTimeStamp
+        task.isComplete = isComplete
         return task
     }
 

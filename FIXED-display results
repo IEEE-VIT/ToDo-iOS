@@ -1,0 +1,2 @@
+string text = "No search results found";
+MessageBox.Show(text);

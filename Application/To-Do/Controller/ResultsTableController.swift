@@ -13,7 +13,13 @@ class ResultsTableController: UITableViewController {
     
     var todoList = [Task]()
     
+    
+    //MARK: UITableView DataSource
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        self.todoList.count == 0 ? self.showEmptyState() : self.hideEmptyState()
+        
         return todoList.count
     }
     
@@ -23,5 +29,21 @@ class ResultsTableController: UITableViewController {
         cell.textLabel?.text = task.title
         cell.detailTextLabel?.text = task.dueDate
         return cell
+    }
+    
+    //MARK : Fetch Result State Handling
+    
+    private func showEmptyState() {
+        
+        let emptyResultLabel = UILabel()
+        emptyResultLabel.translatesAutoresizingMaskIntoConstraints = false
+        emptyResultLabel.text = "No Search results!"
+        emptyResultLabel.textColor = .black
+        emptyResultLabel.textAlignment = .center
+        self.tableView.backgroundView = emptyResultLabel
+    }
+    
+    private func hideEmptyState() {
+        self.tableView.backgroundView = nil
     }
 }

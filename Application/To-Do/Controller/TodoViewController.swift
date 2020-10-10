@@ -165,10 +165,18 @@ class TodoViewController: UITableViewController {
         searchController.searchResultsUpdater = self
         searchController.searchBar.autocapitalizationType = .none
         searchController.searchBar.delegate = self
+        searchController.view.backgroundColor = .white
     }
     
     fileprivate func setupEmptyState() {
-        let emptyBackgroundView = EmptyState()
+        
+        let image = UIImage(systemName: "note.text")!
+        let heading = "No tasks added"
+        let subheading = """
+         You can create a new task with ease.
+         Tap the '+' button on top!
+         """
+        let emptyBackgroundView = EmptyState(image: image, heading: heading, subheading: subheading)
         tableView.backgroundView = emptyBackgroundView
         tableView.setNeedsLayout()
         tableView.layoutIfNeeded()

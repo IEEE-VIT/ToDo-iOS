@@ -14,7 +14,6 @@ class EmptyState: UIView {
     
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "note.text")
         imageView.tintColor = .black
         imageView.contentMode = .scaleAspectFit
         
@@ -24,7 +23,6 @@ class EmptyState: UIView {
     private lazy var headingLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 18.0)
-        label.text = "No task added"
         label.textColor = .black
         label.numberOfLines = 0
         label.textAlignment = .center
@@ -35,7 +33,6 @@ class EmptyState: UIView {
     private lazy var subheadingLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15.0, weight: .medium)
-        label.text = "You can create a new task with ease! \n Tap the '+' button on top."
         label.textColor = .darkGray
         label.textAlignment = .center
         
@@ -44,8 +41,12 @@ class EmptyState: UIView {
         return label
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(image: UIImage, heading: String, subheading: String) {
+        super.init(frame: .zero)
+        
+        self.imageView.image = image
+        self.headingLabel.text = heading
+        self.subheadingLabel.text = subheading
         
         let stackViews = UIStackView(arrangedSubviews: [imageView, headingLabel, subheadingLabel])
         stackViews.axis = .vertical

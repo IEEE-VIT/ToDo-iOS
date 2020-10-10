@@ -50,7 +50,7 @@ class TodoViewController: UITableViewController {
         super.viewDidLoad()
         
         showOnboardingIfNeeded()
-        
+        setupEmptyState()
         /// Core data setup and population
         loadData()
     }
@@ -167,12 +167,28 @@ class TodoViewController: UITableViewController {
         searchController.searchBar.delegate = self
     }
     
+    fileprivate func setupEmptyState() {
+        let emptyBackgroundView = EmptyState()
+        tableView.backgroundView = emptyBackgroundView
+        tableView.setNeedsLayout()
+        tableView.layoutIfNeeded()
+    }
+    
     //MARK:  ------ Tableview Datasource methods ------
     // Reference: https://developer.apple.com/documentation/uikit/uitableviewdatasource
     
     /// function to determine `Number of rows` in tableview
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.sortButton.isEnabled = self.todoList.count > 0 
+        self.sortButton.isEnabled = self.todoList.count > 0
+        
+        if todoList.count == 0 {
+            tableView.separatorStyle = .none
+            tableView.backgroundView?.isHidden = false
+        } else {
+            tableView.separatorStyle = .singleLine
+            tableView.backgroundView?.isHidden = true
+        }
+        
         return todoList.count
     }
     

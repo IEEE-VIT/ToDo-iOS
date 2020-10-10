@@ -13,13 +13,39 @@ class ResultsTableController: UITableViewController {
     
     var todoList = [Task]()
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setupEmptyState()
+    }
+    
+    fileprivate func setupEmptyState() {
+        
+        let image = UIImage(systemName: "magnifyingglass")!
+        let heading = "No tasks found :("
+        let subheading = """
+        The task you search is not found.
+        Create new one!
+        """
+        
+        let emptyView = EmptyState(image: image, heading: heading, subheading: subheading)
+        self.tableView.backgroundView = emptyView
+        self.tableView.setNeedsLayout()
+        self.tableView.layoutIfNeeded()
+    }
+    
     
     //MARK: UITableView DataSource
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        self.todoList.count == 0 ? self.showEmptyState() : self.hideEmptyState()
-        
+       if todoList.count == 0 {
+            self.tableView.backgroundView?.isHidden = false
+            self.tableView.separatorStyle = .none
+        } else {
+            self.tableView.backgroundView?.isHidden = true
+            self.tableView.separatorStyle = .singleLine
+        }
         return todoList.count
     }
     
@@ -31,19 +57,4 @@ class ResultsTableController: UITableViewController {
         return cell
     }
     
-    //MARK : Fetch Result State Handling
-    
-    private func showEmptyState() {
-        
-        let emptyResultLabel = UILabel()
-        emptyResultLabel.translatesAutoresizingMaskIntoConstraints = false
-        emptyResultLabel.text = "No Search results!"
-        emptyResultLabel.textColor = .black
-        emptyResultLabel.textAlignment = .center
-        self.tableView.backgroundView = emptyResultLabel
-    }
-    
-    private func hideEmptyState() {
-        self.tableView.backgroundView = nil
-    }
 }

@@ -50,7 +50,7 @@ class TodoViewController: UITableViewController {
         super.viewDidLoad()
         
         showOnboardingIfNeeded()
-        
+        setupEmptyState()
         /// Core data setup and population
         loadData()
     }
@@ -165,6 +165,21 @@ class TodoViewController: UITableViewController {
         searchController.searchResultsUpdater = self
         searchController.searchBar.autocapitalizationType = .none
         searchController.searchBar.delegate = self
+        searchController.view.backgroundColor = .white
+    }
+    
+    fileprivate func setupEmptyState() {
+        
+        let image = UIImage(systemName: "note.text")!
+        let heading = "No tasks added"
+        let subheading = """
+         You can create a new task with ease.
+         Tap the '+' button on top!
+         """
+        let emptyBackgroundView = EmptyState(image: image, heading: heading, subheading: subheading)
+        tableView.backgroundView = emptyBackgroundView
+        tableView.setNeedsLayout()
+        tableView.layoutIfNeeded()
     }
     
     //MARK:  ------ Tableview Datasource methods ------
@@ -172,13 +187,15 @@ class TodoViewController: UITableViewController {
     
     /// function to determine `Number of rows` in tableview
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let todoCount = todoList.count
-        self.sortButton.isEnabled = todoCount > 0
+        self.sortButton.isEnabled = self.todoList.count > 0
         
-        if todoCount == 0 {
-            self.showEmptyState()
+        if todoList.count == 0 {
+            tableView.separatorStyle = .none
+            tableView.backgroundView?.isHidden = false
         } else {
-            self.hideEmptyState()
+            tableView.separatorStyle = .singleLine
+            tableView.backgroundView?.isHidden = true
+        
         }
         
         return todoList.count
@@ -317,27 +334,5 @@ extension TodoViewController {
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
         self.present(alertController, animated: true)
-    }
-}
-
-// MARK: - Empty State
-extension TodoViewController {
-
-    func showEmptyState() {
-        let emptyLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
-        emptyLabel.text = "No Todo available!\n\nYou can add one by tapping\nthe \"+\" icon\non the upper right corner"
-        emptyLabel.textColor = .black
-        emptyLabel.numberOfLines = 0
-        emptyLabel.textAlignment = .center
-        emptyLabel.font = UIFont.preferredFont(forTextStyle: .title2)
-        emptyLabel.sizeToFit()
-
-        self.tableView.backgroundView = emptyLabel
-        self.tableView.separatorStyle = .none
-    }
-
-    func hideEmptyState() {
-        self.tableView.backgroundView = nil
-        self.tableView.separatorStyle = .singleLine
     }
 }

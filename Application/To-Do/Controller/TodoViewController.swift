@@ -195,6 +195,7 @@ class TodoViewController: UITableViewController {
         } else {
             tableView.separatorStyle = .singleLine
             tableView.backgroundView?.isHidden = true
+        
         }
         
         return todoList.count

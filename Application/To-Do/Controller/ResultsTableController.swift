@@ -34,16 +34,18 @@ class ResultsTableController: UITableViewController {
         self.tableView.layoutIfNeeded()
     }
     
+    
+    //MARK: UITableView DataSource
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if todoList.count == 0 {
+       if todoList.count == 0 {
             self.tableView.backgroundView?.isHidden = false
             self.tableView.separatorStyle = .none
         } else {
             self.tableView.backgroundView?.isHidden = true
             self.tableView.separatorStyle = .singleLine
         }
-        
         return todoList.count
     }
     
@@ -54,4 +56,5 @@ class ResultsTableController: UITableViewController {
         cell.detailTextLabel?.text = task.dueDate
         return cell
     }
+    
 }

@@ -311,3 +311,25 @@ extension TodoViewController {
         self.present(alertController, animated: true)
     }
 }
+
+// MARK: - Empty State
+extension TodoViewController {
+
+    func showEmptyState() {
+        let emptyLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
+        emptyLabel.text = "No Todo available!\n\nYou can add one by tapping\nthe \"+\" icon\non the upper right corner"
+        emptyLabel.textColor = .black
+        emptyLabel.numberOfLines = 0
+        emptyLabel.textAlignment = .center
+        emptyLabel.font = UIFont.preferredFont(forTextStyle: .title2)
+        emptyLabel.sizeToFit()
+
+        self.tableView.backgroundView = emptyLabel
+        self.tableView.separatorStyle = .none
+    }
+
+    func hideEmptyState() {
+        self.tableView.backgroundView = nil
+        self.tableView.separatorStyle = .singleLine
+    }
+}

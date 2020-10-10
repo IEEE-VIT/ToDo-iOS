@@ -172,7 +172,15 @@ class TodoViewController: UITableViewController {
     
     /// function to determine `Number of rows` in tableview
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.sortButton.isEnabled = self.todoList.count > 0 
+        let todoCount = todoList.count
+        self.sortButton.isEnabled = todoCount > 0
+        
+        if todoCount == 0 {
+            self.showEmptyState()
+        } else {
+            self.hideEmptyState()
+        }
+        
         return todoList.count
     }
     

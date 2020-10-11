@@ -28,4 +28,13 @@ class Constants {
     struct Key{
         static let onboarding = "already_shown_onboarding"
     }
+    
+    struct Action{
+        static let star = "star"
+        static let unstar = "unstar"
+        static let add = "add"
+        static let update = "update"
+        static let delet = "delete"
+        static let complete = "complete"
+    }
 }

@@ -221,8 +221,10 @@ class TodoViewController: UITableViewController {
     /// `UISwipeActionsConfiguration` for delete and star  buttons
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
+        let actions = Constants.Action.self
+        
         // DELETE ACTION
-        let delete = UIContextualAction(style: .destructive, title: "Delete") {  (_, _, _) in
+        let delete = UIContextualAction(style: .destructive, title: actions.delete) {  (_, _, _) in
             self.deleteTask(at: indexPath.row)
         }
         
@@ -231,7 +233,7 @@ class TodoViewController: UITableViewController {
             self.starTask(at: indexPath.row)
         }
         star.backgroundColor = .orange
-        star.title = todoList[indexPath.row].isFavourite ? "Unstar" : "Star"
+        star.title = todoList[indexPath.row].isFavourite ? actions.unstar : actions.star
         
         let swipeActions = UISwipeActionsConfiguration(actions: [delete,star])
         return swipeActions
@@ -239,10 +241,11 @@ class TodoViewController: UITableViewController {
     
     /// `UISwipeActionsConfiguration` for completing a task
     override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let completeTask = UIContextualAction(style: .normal, title: "Complete") {  (_, _, _) in
+        let completeTask = UIContextualAction(style: .normal, title: "") {  (_, _, _) in
             self.completeTask(at: indexPath.row)
         }
         completeTask.backgroundColor = .systemGreen
+        completeTask.title = Constants.Action.complete
         let swipeActions = UISwipeActionsConfiguration(actions: [completeTask])
         
         return swipeActions
@@ -343,7 +346,7 @@ extension TodoViewController {
             alertController.addAction(action)
         }
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: Constants.Action.cancel, style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
         self.present(alertController, animated: true)
     }

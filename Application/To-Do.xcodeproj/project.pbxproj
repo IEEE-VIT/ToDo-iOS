@@ -126,10 +126,9 @@
 		5BBE55BF252453CB00090F87 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				5BC2F0822532D86900B648C2 /* Cells */,
 				4F953E4F2531C25E0027144C /* EmptyState.swift */,
 				5BBE55A32523A42700090F87 /* Main.storyboard */,
-				E924B486252D63FD004FD116 /* ImageAttachmentCell.swift */,
-				AB95E032252712C4008C4E48 /* TaskCell.swift */,
 				5BBE55A92523A42C00090F87 /* Assets.xcassets */,
 				5BBE55AB2523A42C00090F87 /* LaunchScreen.storyboard */,
 			);
@@ -160,6 +159,15 @@
 				5BC2F07A2532D10F00B648C2 /* Constants.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		5BC2F0822532D86900B648C2 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				E924B486252D63FD004FD116 /* ImageAttachmentCell.swift */,
+				AB95E032252712C4008C4E48 /* TaskCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		6555BCAA252C3FAC00E7DF3D /* To-DoTests */ = {

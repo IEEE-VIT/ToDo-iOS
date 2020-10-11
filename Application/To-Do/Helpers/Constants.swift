@@ -34,7 +34,8 @@ class Constants {
         static let unstar = "unstar"
         static let add = "add"
         static let update = "update"
-        static let delet = "delete"
+        static let delete = "delete"
         static let complete = "complete"
+        static let cancel = "cancel"
     }
 }

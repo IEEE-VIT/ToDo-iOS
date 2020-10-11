@@ -43,12 +43,6 @@ class TodoViewController: UITableViewController {
         return fetchRequest
     }()
     
-    /// `Reuse Identifier` for TodoTableViewCell
-    let todoCellReuseIdentifier = "todocell"
-    
-    /// `Segue Identifier` to go to TaskDetailsViewController
-    let taskDetailsIdentifier = "gototask"
-    
     /// default sort is `Alphabetical ascending`
     var currentSelectedSortType: SortTypesAvailable = .sortByNameAsc
     
@@ -99,7 +93,7 @@ class TodoViewController: UITableViewController {
     //MARK: -------- IBActions --------
     /// perform segue to `TaskDetailsViewController` if `+` tapped
     @IBAction func addTasksTapped(_ sender: UIBarButtonItem) {
-        performSegue(withIdentifier: taskDetailsIdentifier, sender: Any?.self)
+        performSegue(withIdentifier: Constants.Segue.taskToTaskDetail, sender: false)
     }
     
     @IBAction func sortButtonTapped(_ sender: UIBarButtonItem) {
@@ -108,7 +102,6 @@ class TodoViewController: UITableViewController {
     
     //MARK: -------- STAR - DELETE - COMPLETE - UPDATE --------
     
-    ///Star task
     /// function called when `Star Task` tapped
     /// - Parameter index: Which task to  star
     func starTask(at index : Int){
@@ -116,7 +109,6 @@ class TodoViewController: UITableViewController {
         updateTask()
     }
     
-    ///Delete task
     /// function called when `Delete Task` tapped
     /// - Parameter index: Which task to  delete
     func deleteTask(at index : Int){
@@ -160,10 +152,7 @@ class TodoViewController: UITableViewController {
     
     /// onboarding setup
     fileprivate func showOnboardingIfNeeded() {
-        guard let onboardingController =
-                self.storyboard?.instantiateViewController(identifier: "OnboardingViewController") as? OnboardingViewController else {
-            return
-        }
+        guard let onboardingController = self.storyboard?.instantiateViewController(identifier: Constants.ViewController.Onboarding) as? OnboardingViewController else { return }
         
         if !onboardingController.alreadyShown() {
             DispatchQueue.main.async {
@@ -175,7 +164,7 @@ class TodoViewController: UITableViewController {
     /// search controller setup
     fileprivate func setupSearchController() {
         resultsTableController =
-            self.storyboard?.instantiateViewController(withIdentifier: "ResultsTableController") as? ResultsTableController
+            self.storyboard?.instantiateViewController(withIdentifier: Constants.ViewController.ResultsTable) as? ResultsTableController
         resultsTableController.tableView.delegate = self
         searchController = UISearchController(searchResultsController: resultsTableController)
         searchController.delegate = self
@@ -186,21 +175,13 @@ class TodoViewController: UITableViewController {
     }
     
     fileprivate func setupEmptyState() {
-        
-        let image = UIImage(systemName: "note.text")!
-        let heading = "No tasks added"
-        let subheading = """
-         You can create a new task with ease.
-         Tap the '+' button on top!
-         """
-        let emptyBackgroundView = EmptyState(image: image, heading: heading, subheading: subheading)
+        let emptyBackgroundView = EmptyState(.emptyList)
         tableView.backgroundView = emptyBackgroundView
         tableView.setNeedsLayout()
         tableView.layoutIfNeeded()
     }
     
     //MARK:  ------ Tableview Datasource methods ------
-    // Reference: https://developer.apple.com/documentation/uikit/uitableviewdatasource
     
     /// function to determine `Number of rows` in tableview
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -220,7 +201,7 @@ class TodoViewController: UITableViewController {
     
     /// function  to determine `tableview cell` at a given row
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: todoCellReuseIdentifier, for: indexPath) as! TaskCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Cell.taskCell, for: indexPath) as! TaskCell
         let task = todoList[indexPath.row]
         cell.title.text = task.title
         cell.subtitle.text = task.dueDate
@@ -231,25 +212,28 @@ class TodoViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         lastIndexTapped = indexPath.row
         let task = todoList[indexPath.row]
-        performSegue(withIdentifier: taskDetailsIdentifier, sender: task)
+        performSegue(withIdentifier: Constants.Segue.taskToTaskDetail, sender: task)
     }
     
     
     //MARK:  ----- Tableview Delagate methods  ------
-    // Reference: https://developer.apple.com/documentation/uikit/uitableviewdelegate
     
     /// `UISwipeActionsConfiguration` for delete and star  buttons
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        // DELETE ACTION
         let delete = UIContextualAction(style: .destructive, title: "Delete") {  (_, _, _) in
             self.deleteTask(at: indexPath.row)
         }
-        let star = UIContextualAction(style: .normal, title: todoList[indexPath.row].isFavourite ? "Unstar" : "Star"){  (_, _, _) in
+        
+        // STAR ACTION
+        let star = UIContextualAction(style: .normal, title:""){ (_,_,_) in
             self.starTask(at: indexPath.row)
         }
         star.backgroundColor = .orange
+        star.title = todoList[indexPath.row].isFavourite ? "Unstar" : "Star"
         
         let swipeActions = UISwipeActionsConfiguration(actions: [delete,star])
-        
         return swipeActions
     }
     

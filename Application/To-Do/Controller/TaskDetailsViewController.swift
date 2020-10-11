@@ -76,7 +76,7 @@ class TaskDetailsViewController: UIViewController{
         }
         self.navigationController?.popViewController(animated: true)
     }
-
+    
     /// Function that determines if a task is valid or not. A valid task has both a title and due date.
     /// Title: String taken from `taskTitleTextField`
     /// endDate : String taken from `endDueDateTextField`
@@ -140,7 +140,7 @@ class TaskDetailsViewController: UIViewController{
         self.selectedDateTimeStamp = sender.date.timeIntervalSince1970
         endDate = dateFormatter.string(from: selectedDate)
         endDateTextField.text = endDate
-
+        
     }
     
 }
@@ -159,7 +159,7 @@ extension TaskDetailsViewController: UITextFieldDelegate, UITextViewDelegate {
             textView.textColor = .black
         }
     }
-        
+    
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
             textView.text = "Enter your subtasks here"
@@ -176,12 +176,10 @@ extension TaskDetailsViewController: UICollectionViewDelegate, UICollectionViewD
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Cell.photoCell, for: indexPath) as! ImageAttachmentCell
         let image = imagesAttached[indexPath.row]
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AttachmentCell", for: indexPath)
         
-        if let imageCell = cell as? ImageAttachmentCell {
-            imageCell.imageView.image = image
-        }
+        cell.imageView.image = image
         
         return cell
     }

@@ -9,9 +9,7 @@
 import UIKit
 
 class OnboardingViewController: UIViewController {
-    
-    let userDefaultsKey = "already_shown_onboarding"
-    
+        
     @IBOutlet weak var nextButton: UIButton!
 
     override func viewDidLoad() {
@@ -20,7 +18,7 @@ class OnboardingViewController: UIViewController {
     }
     
     func alreadyShown() -> Bool {
-        return UserDefaults.standard.bool(forKey: userDefaultsKey)
+        return UserDefaults.standard.bool(forKey: Constants.Key.onboarding)
     }
     
     @IBAction func nextButtonTapped(_ sender: Any) {
@@ -29,7 +27,7 @@ class OnboardingViewController: UIViewController {
     }
     
     private func markAsSeen() {
-        UserDefaults.standard.set(true, forKey: userDefaultsKey)
+        UserDefaults.standard.set(true, forKey: Constants.Key.onboarding)
     }
 
     fileprivate func setupViews() {

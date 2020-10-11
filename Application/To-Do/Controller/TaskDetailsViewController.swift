@@ -49,7 +49,7 @@ class TaskDetailsViewController: UIViewController{
         // Tap outside to close the keybord
         let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
         view.addGestureRecognizer(tap)
-        saveButton.title = isUpdate ? "Update" : "Add"
+        saveButton.title = isUpdate ? Constants.Action.update : Constants.Action.add
     }
     
     @IBAction func addImageAttachment(_ sender: Any) {
@@ -140,7 +140,6 @@ class TaskDetailsViewController: UIViewController{
         self.selectedDateTimeStamp = sender.date.timeIntervalSince1970
         endDate = dateFormatter.string(from: selectedDate)
         endDateTextField.text = endDate
-        
     }
     
 }

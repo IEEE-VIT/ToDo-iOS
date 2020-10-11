@@ -41,12 +41,12 @@ class EmptyState: UIView {
         return label
     }()
     
-    init(image: UIImage, heading: String, subheading: String) {
+    init(_ type : EmptyStateType) {
         super.init(frame: .zero)
         
-        self.imageView.image = image
-        self.headingLabel.text = heading
-        self.subheadingLabel.text = subheading
+        self.imageView.image = type.image
+        self.headingLabel.text = type.heading
+        self.subheadingLabel.text = type.subheading
         
         let stackViews = UIStackView(arrangedSubviews: [imageView, headingLabel, subheadingLabel])
         stackViews.axis = .vertical
@@ -63,4 +63,44 @@ class EmptyState: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    public enum EmptyStateType{
+        case emptySearch
+        case emptyList
+        
+        var heading : String{
+            switch self {
+            case .emptySearch:
+                return "No tasks found :("
+            case .emptyList:
+                return "No tasks added"
+            }
+        }
+        
+        
+        var subheading : String{
+            switch self {
+            case .emptySearch:
+                return """
+                        The task you search is not found.
+                        Create new one!
+                        """
+            case .emptyList:
+                return """
+                        You can create a new task with ease.
+                        Tap the '+' button on top!
+                        """
+            }
+        }
+        
+        var image : UIImage?{
+            switch self {
+            case .emptySearch:
+                return UIImage(systemName: "magnifyingglass")
+            case .emptyList:
+                return UIImage(systemName: "note.text")
+            }
+        }
+    }
+    
 }

@@ -9,8 +9,6 @@
 import UIKit
 
 class ResultsTableController: UITableViewController {
-    let todoCellReuseIdentifier = "todocell"
-    
     var todoList = [Task]()
     
     override func viewDidLoad() {
@@ -20,15 +18,7 @@ class ResultsTableController: UITableViewController {
     }
     
     fileprivate func setupEmptyState() {
-        
-        let image = UIImage(systemName: "magnifyingglass")!
-        let heading = "No tasks found :("
-        let subheading = """
-        The task you search is not found.
-        Create new one!
-        """
-        
-        let emptyView = EmptyState(image: image, heading: heading, subheading: subheading)
+        let emptyView = EmptyState(.emptySearch)
         self.tableView.backgroundView = emptyView
         self.tableView.setNeedsLayout()
         self.tableView.layoutIfNeeded()
@@ -50,7 +40,7 @@ class ResultsTableController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: todoCellReuseIdentifier)
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: Constants.Cell.taskCell)
         let task = todoList[indexPath.row]
         cell.textLabel?.text = task.title
         cell.detailTextLabel?.text = task.dueDate

@@ -11,8 +11,12 @@ import CoreData
 
 class TodoViewController: UITableViewController {
     
+    //MARK: -------- OUTLETS & VARIABLES --------
+    
     /// `Tableview` to display list of tasks
     @IBOutlet weak var todoTableView: UITableView!
+    
+    /// `Sort button` to sort tasks
     @IBOutlet weak var sortButton: UIBarButtonItem!
     
     /// `SearchController` to include search bar
@@ -23,10 +27,13 @@ class TodoViewController: UITableViewController {
     
     /// `DataSource` for todoTableview
     var todoList : [Task] = []
+    
+    /// last task tapped!
     var lastIndexTapped : Int = 0
     
     /// Coredata managed object
     var moc: NSManagedObjectContext!
+
     /// Controller to fetch tasks from core-data
     var fetchedResultsController: NSFetchedResultsController<Task>!
     
@@ -42,17 +49,18 @@ class TodoViewController: UITableViewController {
     /// `Segue Identifier` to go to TaskDetailsViewController
     let taskDetailsIdentifier = "gototask"
     
+    /// default sort is `Alphabetical ascending`
     var currentSelectedSortType: SortTypesAvailable = .sortByNameAsc
     
-    //MARK: View lifecycle methods
+    
+    //MARK: -------- View lifecycle methods --------
+    
     override func viewDidLoad() {
-        setupSearchController()
         super.viewDidLoad()
-        
-        showOnboardingIfNeeded()
-        setupEmptyState()
-        /// Core data setup and population
-        loadData()
+        showOnboardingIfNeeded() /// present onboarding screen for first time
+        setupEmptyState() /// show emppty view if no tasks present
+        loadData() /// Core data setup and population
+        setupSearchController() /// setup search view controller for searching
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -62,9 +70,7 @@ class TodoViewController: UITableViewController {
     
     /// initialize ManagedObjectContext
     func loadData() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return
-        }
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let persistenceContainer = appDelegate.persistentContainer
         moc = persistenceContainer.viewContext
         defaultFetchRequest.sortDescriptors = currentSelectedSortType.getSortDescriptor()
@@ -83,14 +89,14 @@ class TodoViewController: UITableViewController {
     func setupFetchedResultsController(fetchRequest: NSFetchRequest<Task>) {
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: moc, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController.delegate = self
-        do{
+        do {
             try fetchedResultsController.performFetch()
         } catch {
             fatalError(error.localizedDescription)
         }
     }
     
-    //MARK: IBActions
+    //MARK: -------- IBActions --------
     /// perform segue to `TaskDetailsViewController` if `+` tapped
     @IBAction func addTasksTapped(_ sender: UIBarButtonItem) {
         performSegue(withIdentifier: taskDetailsIdentifier, sender: Any?.self)
@@ -100,21 +106,22 @@ class TodoViewController: UITableViewController {
         showSortAlertController()
     }
     
+    //MARK: -------- STAR - DELETE - COMPLETE - UPDATE --------
     
     ///Star task
     /// function called when `Star Task` tapped
+    /// - Parameter index: Which task to  star
     func starTask(at index : Int){
-        //TODO: write star login
         todoList[index].isFavourite = todoList[index].isFavourite ? false : true
         updateTask()
     }
     
     ///Delete task
     /// function called when `Delete Task` tapped
+    /// - Parameter index: Which task to  delete
     func deleteTask(at index : Int){
         let element = todoList.remove(at: index) /// removes task at index
-        /// deleting the object from core data
-        moc.delete(element)
+        moc.delete(element) /// deleting the object from core data
         do {
             try moc.save()
         } catch {
@@ -123,7 +130,7 @@ class TodoViewController: UITableViewController {
         }
         tableView.reloadData() /// Reload tableview with remaining data
     }
-
+    
     /// Mark a task as complete and remove from the `tableView`
     /// - Parameter index: Which task to mark as complete
     func completeTask(at index : Int){
@@ -157,7 +164,7 @@ class TodoViewController: UITableViewController {
                 self.storyboard?.instantiateViewController(identifier: "OnboardingViewController") as? OnboardingViewController else {
             return
         }
-
+        
         if !onboardingController.alreadyShown() {
             DispatchQueue.main.async {
                 self.present(onboardingController, animated: true)
@@ -205,7 +212,7 @@ class TodoViewController: UITableViewController {
         } else {
             tableView.separatorStyle = .singleLine
             tableView.backgroundView?.isHidden = true
-        
+            
         }
         
         return todoList.count
@@ -245,7 +252,7 @@ class TodoViewController: UITableViewController {
         
         return swipeActions
     }
-
+    
     /// `UISwipeActionsConfiguration` for completing a task
     override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let completeTask = UIContextualAction(style: .normal, title: "Complete") {  (_, _, _) in
@@ -253,7 +260,7 @@ class TodoViewController: UITableViewController {
         }
         completeTask.backgroundColor = .systemGreen
         let swipeActions = UISwipeActionsConfiguration(actions: [completeTask])
-
+        
         return swipeActions
     }
     

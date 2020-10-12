@@ -144,7 +144,9 @@ class TodoViewController: UITableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let taskDetailVC = segue.destination as? TaskDetailsViewController{
+        if let taskDetailVC = segue.destination as? TaskDetailsViewController {
+            // Hide the tab bar when new controller is pushed onto the screen
+            self.hidesBottomBarWhenPushed = true
             taskDetailVC.delegate = self
             taskDetailVC.task = sender as? Task
         }

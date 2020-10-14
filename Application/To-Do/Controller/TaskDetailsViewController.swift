@@ -16,16 +16,16 @@ protocol TaskDelegate: class {
 class TaskDetailsViewController: UIViewController{
     
     // OUTLETS
-    @IBOutlet weak var taskTitleTextField: UITextField!
-    @IBOutlet weak var subTasksTextView: UITextView!
-    @IBOutlet weak var endDateTextField: UITextField!
-    @IBOutlet weak var saveButton: UIBarButtonItem!
-    @IBOutlet weak var attachmentCollection: UICollectionView!
+    @IBOutlet private weak var taskTitleTextField: UITextField!
+    @IBOutlet private weak var subTasksTextView: UITextView!
+    @IBOutlet private weak var endDateTextField: UITextField!
+    @IBOutlet private weak var saveButton: UIBarButtonItem!
+    @IBOutlet private weak var attachmentCollection: UICollectionView!
     
     
     // VARIABLES
     var task : Task? = nil
-    var endDate : String = ""
+    var endDate : String = .empty
     var endDatePicker: UIDatePicker!
     var dateFormatter: DateFormatter = DateFormatter()
     weak var delegate : TaskDelegate?
@@ -64,7 +64,7 @@ class TaskDetailsViewController: UIViewController{
     }
     
     @IBAction func saveTapped(_ sender: UIBarButtonItem) {
-        if !isValidTask() { return }
+        guard isValidTask() else { return }
         guard let task = createTaskBody() else {
             self.navigationController?.popViewController(animated: true)
             return
@@ -98,8 +98,8 @@ class TaskDetailsViewController: UIViewController{
     /// Subtask: String taken from `subTasksTextView`
     /// endDate : String taken from `didPickDate method`
     func createTaskBody()->Task?{
-        let title = taskTitleTextField.text ?? ""
-        let subtask = subTasksTextView.text ?? ""
+        let title = taskTitleTextField.text ?? .empty
+        let subtask = subTasksTextView.text ?? .empty
         /// check if we are updating the task or creatiing the task
         if self.task == nil {
             let mainController = self.delegate as! TodoViewController
@@ -178,7 +178,7 @@ extension TaskDetailsViewController: UICollectionViewDelegate, UICollectionViewD
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Cell.photoCell, for: indexPath) as! ImageAttachmentCell
         let image = imagesAttached[indexPath.row]
         
-        cell.imageView.image = image
+        cell.setImage(image)
         
         return cell
     }

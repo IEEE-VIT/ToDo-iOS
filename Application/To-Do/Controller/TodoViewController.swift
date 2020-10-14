@@ -226,12 +226,12 @@ class TodoViewController: UITableViewController {
         let actions = Constants.Action.self
         
         // DELETE ACTION
-        let delete = UIContextualAction(style: .destructive, title: actions.delete) {  (_, _, _) in
+        let delete = UIContextualAction(style: .destructive, title: actions.delete) { _,_,_ in
             self.deleteTask(at: indexPath.row)
         }
         
         // STAR ACTION
-        let star = UIContextualAction(style: .normal, title:""){ (_,_,_) in
+        let star = UIContextualAction(style: .normal, title: .empty) { _,_,_ in
             self.starTask(at: indexPath.row)
         }
         star.backgroundColor = .orange
@@ -243,7 +243,7 @@ class TodoViewController: UITableViewController {
     
     /// `UISwipeActionsConfiguration` for completing a task
     override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let completeTask = UIContextualAction(style: .normal, title: "") {  (_, _, _) in
+        let completeTask = UIContextualAction(style: .normal, title: .empty) {  (_, _, _) in
             self.completeTask(at: indexPath.row)
         }
         completeTask.backgroundColor = .systemGreen
@@ -268,7 +268,11 @@ extension TodoViewController: NSFetchedResultsControllerDelegate {
         tableView.endUpdates()
     }
     
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
+                    didChange anObject: Any,
+                    at indexPath: IndexPath?,
+                    for type: NSFetchedResultsChangeType,
+                    newIndexPath: IndexPath?) {
         switch type {
         case .insert:
             tableView.insertRows(at: [newIndexPath!], with: .fade)

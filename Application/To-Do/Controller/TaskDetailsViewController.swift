@@ -31,12 +31,16 @@ class TaskDetailsViewController: UIViewController{
     weak var delegate : TaskDelegate?
     var isUpdate: Bool = false
     var selectedDateTimeStamp: Double?
-    var imagesAttached = [UIImage]()
     
     var cameraHelper = CameraHelper()
+    var datasource = TaskDetailsDataSource()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        attachmentCollection.dataSource = datasource
+        TaskDetailsDataSource.imagesAttached = []
+
         isUpdate = (task != nil)
         endDatePicker = UIDatePicker()
         endDatePicker.addTarget(self, action: #selector(didPickDate(_:)), for: .valueChanged)
@@ -58,7 +62,7 @@ class TaskDetailsViewController: UIViewController{
             guard let image = image else { return }
             
             // Adding attachment
-            self?.imagesAttached.append(image)
+            TaskDetailsDataSource.imagesAttached.append(image)
             self?.attachmentCollection.reloadData()
         }
     }
@@ -109,7 +113,7 @@ class TaskDetailsViewController: UIViewController{
         task?.subTasks = subtask
         task?.dueDate = endDate
         task?.dueDateTimeStamp = selectedDateTimeStamp ?? 0
-        task?.attachments = try? NSKeyedArchiver.archivedData(withRootObject: imagesAttached, requiringSecureCoding: false)
+        task?.attachments = try? NSKeyedArchiver.archivedData(withRootObject: TaskDetailsDataSource.imagesAttached, requiringSecureCoding: false)
         task?.isComplete = false
         
         return task
@@ -127,7 +131,7 @@ class TaskDetailsViewController: UIViewController{
         
         // Recover attachments
         if let attachments = task.attachments {
-            imagesAttached = NSKeyedUnarchiver.unarchiveObject(with: attachments) as? [UIImage] ?? []
+            TaskDetailsDataSource.imagesAttached = NSKeyedUnarchiver.unarchiveObject(with: attachments) as? [UIImage] ?? []
         }
     }
     
@@ -167,23 +171,8 @@ extension TaskDetailsViewController: UITextFieldDelegate, UITextViewDelegate {
     }
 }
 
-extension TaskDetailsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imagesAttached.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Cell.photoCell, for: indexPath) as! ImageAttachmentCell
-        let image = imagesAttached[indexPath.row]
-        
-        cell.imageView.image = image
-        
-        return cell
-    }
-    
+extension TaskDetailsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        debugPrint("Click: \(indexPath.row) \(imagesAttached[indexPath.row])")
+        debugPrint("Click: \(indexPath.row) \(TaskDetailsDataSource.imagesAttached[indexPath.row])")
     }
 }

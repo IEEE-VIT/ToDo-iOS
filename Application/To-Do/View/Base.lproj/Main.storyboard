@@ -226,7 +226,6 @@
                                     </collectionViewCell>
                                 </cells>
                                 <connections>
-                                    <outlet property="dataSource" destination="4AD-BL-kUr" id="9dM-BB-lGK"/>
                                     <outlet property="delegate" destination="4AD-BL-kUr" id="psV-6i-u9l"/>
                                 </connections>
                             </collectionView>

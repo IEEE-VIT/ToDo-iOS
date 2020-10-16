@@ -67,6 +67,7 @@ class EmptyState: UIView {
     public enum EmptyStateType{
         case emptySearch
         case emptyList
+        case emptyHistory
         
         var heading : String{
             switch self {
@@ -74,6 +75,8 @@ class EmptyState: UIView {
                 return "No tasks found :("
             case .emptyList:
                 return "No tasks added"
+            case .emptyHistory:
+                return "No tasks found"
             }
         }
         
@@ -90,6 +93,11 @@ class EmptyState: UIView {
                         You can create a new task with ease.
                         Tap the '+' button on top!
                         """
+            case .emptyHistory:
+                return """
+                        You can create a new task with ease.
+                        Tap the '+' button on top on Tasks Tab!
+                        """
             }
         }
         
@@ -98,6 +106,8 @@ class EmptyState: UIView {
             case .emptySearch:
                 return UIImage(systemName: "magnifyingglass")
             case .emptyList:
+                return UIImage(systemName: "note.text")
+            case .emptyHistory:
                 return UIImage(systemName: "note.text")
             }
         }

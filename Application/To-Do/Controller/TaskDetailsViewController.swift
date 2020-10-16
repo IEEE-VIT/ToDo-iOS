@@ -16,16 +16,16 @@ protocol TaskDelegate: class {
 class TaskDetailsViewController: UIViewController{
     
     // OUTLETS
-    @IBOutlet weak var taskTitleTextField: UITextField!
-    @IBOutlet weak var subTasksTextView: UITextView!
-    @IBOutlet weak var endDateTextField: UITextField!
-    @IBOutlet weak var saveButton: UIBarButtonItem!
-    @IBOutlet weak var attachmentCollection: UICollectionView!
+    @IBOutlet private weak var taskTitleTextField: UITextField!
+    @IBOutlet private weak var subTasksTextView: UITextView!
+    @IBOutlet private weak var endDateTextField: UITextField!
+    @IBOutlet private weak var saveButton: UIBarButtonItem!
+    @IBOutlet private weak var attachmentCollection: UICollectionView!
     
     
     // VARIABLES
     var task : Task? = nil
-    var endDate : String = ""
+    var endDate : String = .empty
     var endDatePicker: UIDatePicker!
     var dateFormatter: DateFormatter = DateFormatter()
     weak var delegate : TaskDelegate?
@@ -68,7 +68,7 @@ class TaskDetailsViewController: UIViewController{
     }
     
     @IBAction func saveTapped(_ sender: UIBarButtonItem) {
-        if !isValidTask() { return }
+        guard isValidTask() else { return }
         guard let task = createTaskBody() else {
             self.navigationController?.popViewController(animated: true)
             return
@@ -102,8 +102,8 @@ class TaskDetailsViewController: UIViewController{
     /// Subtask: String taken from `subTasksTextView`
     /// endDate : String taken from `didPickDate method`
     func createTaskBody()->Task?{
-        let title = taskTitleTextField.text ?? ""
-        let subtask = subTasksTextView.text ?? ""
+        let title = taskTitleTextField.text ?? .empty
+        let subtask = subTasksTextView.text ?? .empty
         /// check if we are updating the task or creatiing the task
         if self.task == nil {
             let mainController = self.delegate as! TodoViewController
@@ -171,7 +171,26 @@ extension TaskDetailsViewController: UITextFieldDelegate, UITextViewDelegate {
     }
 }
 
+<<<<<<< HEAD
 extension TaskDetailsViewController: UICollectionViewDelegate {
+=======
+extension TaskDetailsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return imagesAttached.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Cell.photoCell, for: indexPath) as! ImageAttachmentCell
+        let image = imagesAttached[indexPath.row]
+        
+        cell.setImage(image)
+        
+        return cell
+    }
+    
+>>>>>>> eac319f932a886889e9eef8cad9609862eeda437
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         debugPrint("Click: \(indexPath.row) \(TaskDetailsDataSource.imagesAttached[indexPath.row])")
     }

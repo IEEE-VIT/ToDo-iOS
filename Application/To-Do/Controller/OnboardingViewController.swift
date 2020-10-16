@@ -9,6 +9,10 @@
 import UIKit
 
 class OnboardingViewController: UIViewController {
+    
+    private enum LocalConstants {
+        static let cornerRadius: CGFloat = 10
+    }
         
     @IBOutlet weak var nextButton: UIButton!
 
@@ -31,7 +35,7 @@ class OnboardingViewController: UIViewController {
     }
 
     fileprivate func setupViews() {
-        nextButton.layer.cornerRadius = 10
+        nextButton.layer.cornerRadius = LocalConstants.cornerRadius
         nextButton.clipsToBounds = true
     }
 

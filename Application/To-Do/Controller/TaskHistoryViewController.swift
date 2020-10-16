@@ -15,7 +15,7 @@ class TaskHistoryViewController: UIViewController {
     @IBOutlet var historyTableView: UITableView!
 
     /// `DataSource` for historyTableView
-    var completedList : [Task] = []
+    var dataSource = TaskHistoryDataSource()
 
     /// CoreData managed object
     var moc: NSManagedObjectContext!
@@ -30,6 +30,8 @@ class TaskHistoryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        historyTableView.dataSource = dataSource
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -49,29 +51,12 @@ class TaskHistoryViewController: UIViewController {
             let request = Task.fetchRequest() as NSFetchRequest<Task>
             let filter = NSPredicate(format: "isComplete = %d", true)
             request.predicate = filter
-            completedList = try moc.fetch(request)
+            TaskHistoryDataSource.completedList = try moc.fetch(request)
             DispatchQueue.main.async {
                 self.historyTableView.reloadData()
             }
         } catch {
             print("can't fetch data")
         }
-    }
-}
-
-// MARK: - TableView DataSource and Delegate Methods
-extension TaskHistoryViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return completedList.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Cell.taskCell, for: indexPath) as! TaskCell
-        let task = completedList[indexPath.row]
-        cell.title.text = task.title
-        cell.subtitle.text = task.dueDate
-        cell.starImage.isHidden = true
-        return cell
     }
 }

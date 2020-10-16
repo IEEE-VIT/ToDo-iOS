@@ -34,10 +34,21 @@ class TaskHistoryViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         loadData()
+        setupEmptyState()
     }
 
     // MARK: - Logic
 
+    fileprivate func setupEmptyState() {
+        DispatchQueue.main.async {
+            let emptyBackgroundView = EmptyState(.emptyHistory)
+            self.historyTableView.backgroundView = emptyBackgroundView
+            self.historyTableView.setNeedsLayout()
+            self.historyTableView.layoutIfNeeded()
+        }
+        
+    }
+    
     /// Initialize ManagedObjectContext
     func loadData() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
@@ -63,6 +74,14 @@ class TaskHistoryViewController: UIViewController {
 extension TaskHistoryViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if completedList.count == 0 {
+             self.historyTableView.backgroundView?.isHidden = false
+             self.historyTableView.separatorStyle = .none
+         } else {
+             self.historyTableView.backgroundView?.isHidden = true
+             self.historyTableView.separatorStyle = .singleLine
+         }
+        
         return completedList.count
     }
 

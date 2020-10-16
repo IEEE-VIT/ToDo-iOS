@@ -47,6 +47,7 @@ class EmptyState: UIView {
         self.imageView.image = type.image
         self.headingLabel.text = type.heading
         self.subheadingLabel.text = type.subheading
+        self.subheadingLabel.numberOfLines = 0
         
         let stackViews = UIStackView(arrangedSubviews: [imageView, headingLabel, subheadingLabel])
         stackViews.axis = .vertical
@@ -67,6 +68,7 @@ class EmptyState: UIView {
     public enum EmptyStateType{
         case emptySearch
         case emptyList
+        case emptyHistory
         
         var heading : String{
             switch self {
@@ -74,6 +76,8 @@ class EmptyState: UIView {
                 return "No tasks found :("
             case .emptyList:
                 return "No tasks added"
+            case .emptyHistory:
+                return "No task history found"
             }
         }
         
@@ -90,6 +94,11 @@ class EmptyState: UIView {
                         You can create a new task with ease.
                         Tap the '+' button on top!
                         """
+            case .emptyHistory:
+                return """
+                        You can add tasks to task history by marking a task as complete.
+                        Swipe left on a task to mark it as complete!
+                        """
             }
         }
         
@@ -99,6 +108,8 @@ class EmptyState: UIView {
                 return UIImage(systemName: "magnifyingglass")
             case .emptyList:
                 return UIImage(systemName: "note.text")
+            case .emptyHistory:
+                return UIImage(systemName: "minus.rectangle")
             }
         }
     }

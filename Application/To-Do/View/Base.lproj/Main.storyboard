@@ -587,7 +587,6 @@
                             </tableViewCell>
                         </prototypes>
                         <connections>
-                            <outlet property="dataSource" destination="r2G-VB-EO1" id="DLG-IY-k78"/>
                             <outlet property="delegate" destination="r2G-VB-EO1" id="IhY-4q-KnU"/>
                         </connections>
                     </tableView>
@@ -608,6 +607,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="sortButton" destination="b7u-lX-2Lr" id="iTi-st-z5G"/>
+                        <outlet property="todoTableView" destination="LGs-Rx-YcS" id="1g0-Mh-KoF"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SJc-qK-IwC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

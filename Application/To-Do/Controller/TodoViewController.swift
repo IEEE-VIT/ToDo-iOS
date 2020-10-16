@@ -15,7 +15,6 @@ class TodoViewController: UITableViewController {
     
     /// `Tableview` to display list of tasks
     @IBOutlet weak var todoTableView: UITableView!
-    
     /// `Sort button` to sort tasks
     @IBOutlet weak var sortButton: UIBarButtonItem!
     
@@ -26,7 +25,7 @@ class TodoViewController: UITableViewController {
     var resultsTableController: ResultsTableController!
     
     /// `DataSource` for todoTableview
-    var todoList : [Task] = []
+    var datasource = TodoDataSource()
     
     /// last task tapped!
     var lastIndexTapped : Int = 0
@@ -51,6 +50,8 @@ class TodoViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        todoTableView.dataSource = datasource
+        self.sortButton.isEnabled = TodoDataSource.todoList.count > 0
         showOnboardingIfNeeded() /// present onboarding screen for first time
         setupEmptyState() /// show emppty view if no tasks present
         loadData() /// Core data setup and population
@@ -72,7 +73,7 @@ class TodoViewController: UITableViewController {
         setupFetchedResultsController(fetchRequest: defaultFetchRequest)
         /// reloading the table view with the fetched objects
         if let objects = fetchedResultsController.fetchedObjects {
-            self.todoList = objects
+            TodoDataSource.todoList = objects
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
@@ -105,19 +106,19 @@ class TodoViewController: UITableViewController {
     /// function called when `Star Task` tapped
     /// - Parameter index: Which task to  star
     func starTask(at index : Int){
-        todoList[index].isFavourite = todoList[index].isFavourite ? false : true
+        TodoDataSource.todoList[index].isFavourite = TodoDataSource.todoList[index].isFavourite ? false : true
         updateTask()
     }
     
     /// function called when `Delete Task` tapped
     /// - Parameter index: Which task to  delete
     func deleteTask(at index : Int){
-        let element = todoList.remove(at: index) /// removes task at index
+        let element = TodoDataSource.todoList.remove(at: index) /// removes task at index
         moc.delete(element) /// deleting the object from core data
         do {
             try moc.save()
         } catch {
-            todoList.insert(element, at: index)
+            TodoDataSource.todoList.insert(element, at: index)
             print(error.localizedDescription)
         }
         tableView.reloadData() /// Reload tableview with remaining data
@@ -126,8 +127,8 @@ class TodoViewController: UITableViewController {
     /// Mark a task as complete and remove from the `tableView`
     /// - Parameter index: Which task to mark as complete
     func completeTask(at index : Int){
-        todoList[index].isComplete = true
-        todoList.remove(at: index) /// removes task at index
+        TodoDataSource.todoList[index].isComplete = true
+        TodoDataSource.todoList.remove(at: index) /// removes task at index
         updateTask()
         tableView.reloadData()
     }
@@ -185,35 +186,11 @@ class TodoViewController: UITableViewController {
     
     //MARK:  ------ Tableview Datasource methods ------
     
-    /// function to determine `Number of rows` in tableview
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.sortButton.isEnabled = self.todoList.count > 0
-        
-        if todoList.count == 0 {
-            tableView.separatorStyle = .none
-            tableView.backgroundView?.isHidden = false
-        } else {
-            tableView.separatorStyle = .singleLine
-            tableView.backgroundView?.isHidden = true
-            
-        }
-        
-        return todoList.count
-    }
-    
-    /// function  to determine `tableview cell` at a given row
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Cell.taskCell, for: indexPath) as! TaskCell
-        let task = todoList[indexPath.row]
-        cell.title.text = task.title
-        cell.subtitle.text = task.dueDate
-        cell.starImage.isHidden = todoList[indexPath.row].isFavourite ? false : true
-        return cell
-    }
+
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         lastIndexTapped = indexPath.row
-        let task = todoList[indexPath.row]
+        let task = TodoDataSource.todoList[indexPath.row]
         performSegue(withIdentifier: Constants.Segue.taskToTaskDetail, sender: task)
     }
     
@@ -235,7 +212,7 @@ class TodoViewController: UITableViewController {
             self.starTask(at: indexPath.row)
         }
         star.backgroundColor = .orange
-        star.title = todoList[indexPath.row].isFavourite ? actions.unstar : actions.star
+        star.title = TodoDataSource.todoList[indexPath.row].isFavourite ? actions.unstar : actions.star
         
         let swipeActions = UISwipeActionsConfiguration(actions: [delete,star])
         return swipeActions
@@ -288,11 +265,11 @@ extension TodoViewController: NSFetchedResultsControllerDelegate {
 /// protocol for `saving` or `updating` `Tasks`
 extension TodoViewController : TaskDelegate{
     func didTapSave(task: Task) {
-        todoList.append(task)
+        TodoDataSource.todoList.append(task)
         do {
             try moc.save()
         } catch {
-            todoList.removeLast()
+            TodoDataSource.todoList.removeLast()
             print(error.localizedDescription)
         }
         loadData()
@@ -312,7 +289,7 @@ extension TodoViewController: UISearchControllerDelegate, UISearchResultsUpdatin
     func updateSearchResults(for searchController: UISearchController) {
         /// perform search only when there is some text
         if let text: String = searchController.searchBar.text?.lowercased(), text.count > 0, let resultsController = searchController.searchResultsController as? ResultsTableController {
-            resultsController.todoList = todoList.filter({ (task) -> Bool in
+            resultsController.todoList = TodoDataSource.todoList.filter({ (task) -> Bool in
                 if task.title?.lowercased().contains(text) == true || task.subTasks?.lowercased().contains(text) == true {
                     return true
                 }

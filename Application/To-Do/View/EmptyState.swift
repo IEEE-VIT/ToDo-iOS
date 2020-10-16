@@ -47,6 +47,7 @@ class EmptyState: UIView {
         self.imageView.image = type.image
         self.headingLabel.text = type.heading
         self.subheadingLabel.text = type.subheading
+        self.subheadingLabel.numberOfLines = 0
         
         let stackViews = UIStackView(arrangedSubviews: [imageView, headingLabel, subheadingLabel])
         stackViews.axis = .vertical
@@ -76,7 +77,7 @@ class EmptyState: UIView {
             case .emptyList:
                 return "No tasks added"
             case .emptyHistory:
-                return "No tasks found"
+                return "No task history found"
             }
         }
         
@@ -95,8 +96,8 @@ class EmptyState: UIView {
                         """
             case .emptyHistory:
                 return """
-                        You can create a new task with ease.
-                        Tap the '+' button on top on Tasks Tab!
+                        You can add tasks to task history by marking a task as complete.
+                        Swipe left on a task to mark it as complete!
                         """
             }
         }
@@ -108,7 +109,7 @@ class EmptyState: UIView {
             case .emptyList:
                 return UIImage(systemName: "note.text")
             case .emptyHistory:
-                return UIImage(systemName: "note.text")
+                return UIImage(systemName: "minus.rectangle")
             }
         }
     }

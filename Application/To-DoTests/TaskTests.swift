@@ -84,7 +84,7 @@ class TaskTests: XCTestCase {
     }
 
     func testCreatTask() {
-        let task = createTask(title: "Task Titile", dueDateTimeStamp: Date().timeIntervalSince1970)
+        let task = createTask(title: "Task Title", dueDateTimeStamp: Date().timeIntervalSince1970)
         XCTAssertNotNil(task)
     }
     

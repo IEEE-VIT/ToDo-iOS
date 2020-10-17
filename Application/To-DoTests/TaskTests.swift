@@ -88,4 +88,16 @@ class TaskTests: XCTestCase {
         XCTAssertNotNil(task)
     }
     
+    func testMarkAsComplete() throws {
+        let tasks = try mockPersistantContainer.viewContext.fetch(Task.fetchRequest()) as? [Task]
+        let task = try XCTUnwrap(tasks?.first)
+        
+        let newIsCompleteValue = !task.isComplete
+        
+        task.isComplete = newIsCompleteValue
+        try mockPersistantContainer.viewContext.save()
+        
+        XCTAssertEqual(task.isComplete, newIsCompleteValue)
+    }
+    
 }

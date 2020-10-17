@@ -34,7 +34,9 @@ class TaskHistoryViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         loadData()
-        setupEmptyState()
+        if completedList.isEmpty {
+            setupEmptyState()
+        }
     }
 
     // MARK: - Logic
@@ -68,13 +70,41 @@ class TaskHistoryViewController: UIViewController {
             print("can't fetch data")
         }
     }
+    /// Deletes task from CoreData and removes from `completedList` and `historyTableView`
+    /// - Parameter indexPath: Which task to  delete
+    func deleteTask(indexPath: IndexPath){
+
+        let confirmation = UIAlertController(title: nil, message: "Delete this task?", preferredStyle: .actionSheet)
+        let deleteAction = UIAlertAction(title: "Yes", style: .destructive) { [weak self] (_) in
+            guard let self = self else { return }
+            self.historyTableView.beginUpdates()
+
+            let task = self.completedList.remove(at: indexPath.row)
+            self.historyTableView.deleteRows(at: [indexPath], with: .automatic)
+            self.moc.delete(task)
+            do {
+                try self.moc.save()
+            } catch {
+                self.completedList.insert(task, at: indexPath.row)
+                print(error.localizedDescription)
+            }
+            self.historyTableView.endUpdates()
+        }
+        let noAction = UIAlertAction(title: "No", style: .cancel) { (_) in
+            print("not going to delete")
+            return
+        }
+        confirmation.addAction(deleteAction)
+        confirmation.addAction(noAction)
+        present(confirmation, animated: true, completion: nil)
+    }
 }
 
 // MARK: - TableView DataSource and Delegate Methods
 extension TaskHistoryViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if completedList.count == 0 {
+        if completedList.isEmpty {
              self.historyTableView.backgroundView?.isHidden = false
              self.historyTableView.separatorStyle = .none
          } else {
@@ -92,5 +122,11 @@ extension TaskHistoryViewController: UITableViewDelegate, UITableViewDataSource 
         cell.subtitle.text = task.dueDate
         cell.starImage.isHidden = true
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            deleteTask(indexPath: indexPath)
+        }
     }
 }

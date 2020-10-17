@@ -34,7 +34,9 @@ class TaskHistoryViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         loadData()
-        setupEmptyState()
+        if completedList.isEmpty {
+            setupEmptyState()
+        }
     }
 
     // MARK: - Logic
@@ -74,7 +76,7 @@ class TaskHistoryViewController: UIViewController {
 extension TaskHistoryViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if completedList.count == 0 {
+        if completedList.isEmpty {
              self.historyTableView.backgroundView?.isHidden = false
              self.historyTableView.separatorStyle = .none
          } else {

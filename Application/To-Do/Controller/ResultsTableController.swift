@@ -29,7 +29,7 @@ class ResultsTableController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-       if todoList.count == 0 {
+        if todoList.isEmpty {
             self.tableView.backgroundView?.isHidden = false
             self.tableView.separatorStyle = .none
         } else {

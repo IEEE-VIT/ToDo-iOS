@@ -82,10 +82,10 @@ class TaskDetailsViewController: UIViewController{
     /// endDate : String taken from `endDueDateTextField`
     /// - Returns: A bool whether or not the task is valid.
     func isValidTask() -> Bool {
-        if taskTitleTextField.text!.isEmpty {
+        if taskTitleTextField.text?.trim().isEmpty ?? true {
             Alert.showNoTaskTitle(on: self)
             return false
-        }else if endDateTextField.text!.isEmpty {
+        } else if endDateTextField.text?.trim().isEmpty ?? true {
             Alert.showNoTaskDueDate(on: self)
             return false
         } else {
@@ -97,9 +97,9 @@ class TaskDetailsViewController: UIViewController{
     /// Title: String taken from `taskTitleTextField`
     /// Subtask: String taken from `subTasksTextView`
     /// endDate : String taken from `didPickDate method`
-    func createTaskBody()->Task?{
-        let title = taskTitleTextField.text ?? .empty
-        let subtask = subTasksTextView.text ?? .empty
+    func createTaskBody()->Task? {
+        let title = taskTitleTextField.text?.trim() ?? .empty
+        let subtask = subTasksTextView.text?.trim() ?? .empty
         /// check if we are updating the task or creatiing the task
         if self.task == nil {
             let mainController = self.delegate as! TodoViewController
@@ -115,8 +115,7 @@ class TaskDetailsViewController: UIViewController{
         return task
     }
     
-    
-    func loadTaskForUpdate(){
+    func loadTaskForUpdate() {
         guard let task = self.task else {
             subTasksTextView.textColor = .placeholderText
             return

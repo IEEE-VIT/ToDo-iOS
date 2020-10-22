@@ -35,6 +35,8 @@ class TaskDetailsViewController: UIViewController{
     
     var cameraHelper = CameraHelper()
     
+    var hapticGenerator: UINotificationFeedbackGenerator? = nil
+
     override func viewDidLoad() {
         super.viewDidLoad()
         isUpdate = (task != nil)
@@ -64,17 +66,28 @@ class TaskDetailsViewController: UIViewController{
     }
     
     @IBAction func saveTapped(_ sender: UIBarButtonItem) {
-        guard isValidTask() else { return }
+        hapticGenerator = UINotificationFeedbackGenerator()
+        hapticGenerator?.prepare()
+        
+        guard isValidTask() else {
+            hapticGenerator?.notificationOccurred(.warning)
+            return
+        }
         guard let task = createTaskBody() else {
             self.navigationController?.popViewController(animated: true)
             return
         }
+        
+        hapticGenerator?.notificationOccurred(.success)
+
         if isUpdate {
             self.delegate?.didTapUpdate(task: task)
         } else {
             self.delegate?.didTapSave(task: task)
         }
         self.navigationController?.popViewController(animated: true)
+        
+        hapticGenerator = nil
     }
     
     /// Function that determines if a task is valid or not. A valid task has both a title and due date.

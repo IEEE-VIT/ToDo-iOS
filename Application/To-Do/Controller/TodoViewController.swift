@@ -46,6 +46,7 @@ class TodoViewController: UITableViewController {
     /// default sort is `Alphabetical ascending`
     var currentSelectedSortType: SortTypesAvailable = .sortByNameAsc
     
+    var hapticNotificationGenerator: UINotificationFeedbackGenerator? = nil
     
     //MARK: -------- View lifecycle methods --------
     
@@ -112,15 +113,21 @@ class TodoViewController: UITableViewController {
     /// function called when `Delete Task` tapped
     /// - Parameter index: Which task to  delete
     func deleteTask(at index : Int){
+        hapticNotificationGenerator = UINotificationFeedbackGenerator()
+        hapticNotificationGenerator?.prepare()
+        
         let element = todoList.remove(at: index) /// removes task at index
         moc.delete(element) /// deleting the object from core data
         do {
             try moc.save()
+            hapticNotificationGenerator?.notificationOccurred(.success)
         } catch {
             todoList.insert(element, at: index)
             print(error.localizedDescription)
+            hapticNotificationGenerator?.notificationOccurred(.error)
         }
         tableView.reloadData() /// Reload tableview with remaining data
+        hapticNotificationGenerator = nil
     }
     
     /// Mark a task as complete and remove from the `tableView`
@@ -135,12 +142,18 @@ class TodoViewController: UITableViewController {
     /// Update task
     /// function called whenever updating a task is required
     func updateTask(){
+        hapticNotificationGenerator = UINotificationFeedbackGenerator()
+        hapticNotificationGenerator?.prepare()
+        
         do {
             try moc.save()
+            hapticNotificationGenerator?.notificationOccurred(.success)
         } catch {
             print(error.localizedDescription)
+            hapticNotificationGenerator?.notificationOccurred(.error)
         }
         loadData()
+        hapticNotificationGenerator = nil
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

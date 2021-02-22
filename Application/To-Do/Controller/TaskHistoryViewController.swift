@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 class TaskHistoryViewController: UIViewController {
-
+    
     // MARK: - IBOutlets
     @IBOutlet var historyTableView: UITableView!
 
@@ -19,7 +19,7 @@ class TaskHistoryViewController: UIViewController {
 
     /// CoreData managed object
     var moc: NSManagedObjectContext!
-
+    
     /// Default fetch request for tasks
     lazy var defaultFetchRequest: NSFetchRequest<Task> = {
         let fetchRequest : NSFetchRequest<Task> = Task.fetchRequest()
@@ -98,6 +98,23 @@ class TaskHistoryViewController: UIViewController {
         confirmation.addAction(noAction)
         present(confirmation, animated: true, completion: nil)
     }
+    
+    // I wasn't sure if you want the user to be able to update completed tasks so I set isUserInteractionEnabled to false for all subviews of taskDetailVC
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let taskDetailVC = segue.destination as? TaskDetailsViewController {
+            // Hide the tab bar when new controller is pushed onto the screen
+            taskDetailVC.hidesBottomBarWhenPushed = true
+//            taskDetailVC.delegate = self
+            taskDetailVC.task = sender as? Task
+            taskDetailVC.view.subviews.forEach {
+                $0.isUserInteractionEnabled = false
+            }
+            if let button = taskDetailVC.navigationItem.rightBarButtonItem {
+                button.isEnabled = false
+                button.tintColor = .clear
+            }
+        }
+    }
 }
 
 // MARK: - TableView DataSource and Delegate Methods
@@ -128,5 +145,11 @@ extension TaskHistoryViewController: UITableViewDelegate, UITableViewDataSource 
         if editingStyle == .delete {
             deleteTask(indexPath: indexPath)
         }
+    }
+    
+    // pushes taskDetailsVC with completed task details
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let task = completedList[indexPath.row]
+        performSegue(withIdentifier: Constants.Segue.taskToTaskDetail, sender: task)
     }
 }

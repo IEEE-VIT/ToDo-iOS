@@ -24,7 +24,7 @@ class TaskDetailsViewController: UIViewController{
     
     
     
-    
+    // UI Elements
     let taskLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
@@ -111,7 +111,6 @@ class TaskDetailsViewController: UIViewController{
         return b
     }()
     
-//    var attachmentCollection: UICollectionView?
     
     
     // VARIABLES
@@ -133,7 +132,7 @@ class TaskDetailsViewController: UIViewController{
         
 
         
-        
+        // programmatically add the savebutton to the right bar button item
         let saveButton = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(saveTapped(_:)))
         navigationItem.rightBarButtonItem = saveButton
         
@@ -215,6 +214,8 @@ class TaskDetailsViewController: UIViewController{
             
         ])
         
+        
+        // This will be added back in future PR
 //        self.view.addSubview(imageLabel)
 //        NSLayoutConstraint.activate([
 //            imageLabel.topAnchor.constraint(equalTo: endDateTextField.bottomAnchor, constant: 20),
@@ -237,18 +238,7 @@ class TaskDetailsViewController: UIViewController{
     }
     
     
-    @objc func addImageAttachment(_sender: Any) {
-        // opening camera
-        cameraHelper.openCamera(in: self) { [weak self] image in
-            guard let image = image else { return }
-            
-            // Adding attachment
-            //            self?.imagesAttached.append(image)
-            //            self?.attachmentCollection.reloadData()
-        }
-    }
-    
-//    @IBAction func addImageAttachment(_ sender: Any) {
+//    @objc func addImageAttachment(_sender: Any) {
 //        // opening camera
 //        cameraHelper.openCamera(in: self) { [weak self] image in
 //            guard let image = image else { return }
@@ -258,8 +248,7 @@ class TaskDetailsViewController: UIViewController{
 //            //            self?.attachmentCollection.reloadData()
 //        }
 //    }
-    //
-
+    
     
     
     @objc func saveTapped(_ sender: UIBarButtonItem) {

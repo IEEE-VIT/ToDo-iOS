@@ -16,11 +16,102 @@ protocol TaskDelegate: class {
 class TaskDetailsViewController: UIViewController{
     
     // OUTLETS
-    @IBOutlet private weak var taskTitleTextField: UITextField!
-    @IBOutlet private weak var subTasksTextView: UITextView!
-    @IBOutlet private weak var endDateTextField: UITextField!
-    @IBOutlet private weak var saveButton: UIBarButtonItem!
-    @IBOutlet private weak var attachmentCollection: UICollectionView!
+    //    @IBOutlet private weak var taskTitleTextField: UITextField!
+    //    @IBOutlet private weak var subTasksTextView: UITextView!
+    //    @IBOutlet private weak var endDateTextField: UITextField!
+    //    @IBOutlet private weak var saveButton: UIBarButtonItem!
+    //    @IBOutlet private weak var attachmentCollection: UICollectionView!
+    
+    
+    
+    
+    let taskLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.text = "Task"
+        l.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        
+        return l
+    }()
+    
+    let taskTitleTextField: UITextField = {
+        let tf = UITextField()
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.placeholder = "Enter task name"
+        tf.layer.borderWidth = 0.5
+        tf.layer.borderColor = UIColor.systemGray.cgColor
+        tf.layer.cornerRadius = 5
+        
+        
+        return tf
+    }()
+    
+    
+    let subtasksLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.text = "Sub Tasks"
+        l.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        
+        return l
+    }()
+    
+    let subTasksTextView: UITextView = {
+        let tv = UITextView()
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.backgroundColor = .secondarySystemGroupedBackground
+        tv.text = "Enter your subtask here"
+        tv.layer.cornerRadius = 5
+        tv.layer.borderColor = UIColor.systemGray.cgColor
+        tv.layer.borderWidth = 0.5
+        
+        return tv
+    }()
+    
+    let endDateLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.text = "End Date"
+        l.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        
+        
+        return l
+    }()
+    
+    let endDateTextField: UITextField = {
+        let tf = UITextField()
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.placeholder = "Select end date"
+        tf.layer.borderWidth = 0.5
+        tf.layer.borderColor = UIColor.systemGray.cgColor
+        tf.layer.cornerRadius = 5
+        
+        
+        return tf
+    }()
+    
+    let imageLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.text = "Image attachments"
+        l.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        
+        
+        return l
+    }()
+    
+    let addImageButton: UIButton = {
+        let b = UIButton()
+        b.translatesAutoresizingMaskIntoConstraints = false
+        b.setTitle("Add image", for: .normal)
+        b.setTitleColor(.systemBlue, for: .normal)
+        b.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        
+        
+        return b
+    }()
+    
+//    var attachmentCollection: UICollectionView?
     
     
     // VARIABLES
@@ -36,11 +127,23 @@ class TaskDetailsViewController: UIViewController{
     var cameraHelper = CameraHelper()
     
     var hapticGenerator: UINotificationFeedbackGenerator? = nil
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+
+        
+        
+        let saveButton = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(saveTapped(_:)))
+        navigationItem.rightBarButtonItem = saveButton
+        
+        setupUI()
+        
         isUpdate = (task != nil)
-        endDatePicker = UIDatePicker()
+//        endDatePicker = UIDatePicker()
+        endDatePicker = UIDatePicker.init(frame: CGRect(x: 0, y: 0, width: view.bounds.size.width, height: 150))
+        endDatePicker.contentHorizontalAlignment = .fill
+
         endDatePicker.addTarget(self, action: #selector(didPickDate(_:)), for: .valueChanged)
         endDatePicker.minimumDate = Date()
         endDateTextField.inputView = endDatePicker
@@ -48,27 +151,121 @@ class TaskDetailsViewController: UIViewController{
         subTasksTextView.addBorder()
         loadTaskForUpdate()
         taskTitleTextField.delegate = self
-        // Tap outside to close the keybord
+        // Tap outside to close the keyboard
         let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
         view.addGestureRecognizer(tap)
         saveButton.title = isUpdate ? Constants.Action.update : Constants.Action.add
     }
     
-    @IBAction func addImageAttachment(_ sender: Any) {
+    // adding and constraining UI elements
+    func setupUI() {
+        
+        self.view.addSubview(taskLabel)
+        NSLayoutConstraint.activate([
+            taskLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: -30),
+            taskLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            taskLabel.widthAnchor.constraint(equalToConstant: self.view.frame.width/2)
+            
+            
+            
+        ])
+        
+        self.view.addSubview(taskTitleTextField)
+        NSLayoutConstraint.activate([
+            taskTitleTextField.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            taskTitleTextField.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            taskTitleTextField.topAnchor.constraint(equalTo: taskLabel.bottomAnchor, constant: 15),
+            taskTitleTextField.heightAnchor.constraint(equalToConstant: self.view.frame.height*0.05),
+            
+        ])
+        
+        self.view.addSubview(subtasksLabel)
+        NSLayoutConstraint.activate([
+            subtasksLabel.topAnchor.constraint(equalTo: taskTitleTextField.bottomAnchor, constant: 30),
+            subtasksLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            subtasksLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20)
+            
+        ])
+        
+        self.view.addSubview(subTasksTextView)
+        NSLayoutConstraint.activate([
+            subTasksTextView.topAnchor.constraint(equalTo: subtasksLabel.bottomAnchor, constant: 8),
+            subTasksTextView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.1428),
+            subTasksTextView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            subTasksTextView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.80 )
+            
+            
+        ])
+        
+        self.view.addSubview(endDateLabel)
+        NSLayoutConstraint.activate([
+            endDateLabel.topAnchor.constraint(equalTo: subTasksTextView.bottomAnchor, constant: 20 ),
+            endDateLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            endDateLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20)
+            
+        ])
+        
+        self.view.addSubview(endDateTextField)
+        NSLayoutConstraint.activate([
+            endDateTextField.topAnchor.constraint(equalTo: endDateLabel.bottomAnchor, constant: 8),
+            endDateTextField.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            endDateTextField.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            endDateTextField.heightAnchor.constraint(equalToConstant: self.view.frame.height*0.05)
+            
+            
+        ])
+        
+//        self.view.addSubview(imageLabel)
+//        NSLayoutConstraint.activate([
+//            imageLabel.topAnchor.constraint(equalTo: endDateTextField.bottomAnchor, constant: 20),
+//            imageLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+//
+//
+//        ])
+//        self.view.addSubview(addImageButton)
+//        NSLayoutConstraint.activate([
+//            addImageButton.topAnchor.constraint(equalTo: endDateTextField.bottomAnchor, constant: 20),
+//            addImageButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+//            imageLabel.trailingAnchor.constraint(equalTo: addImageButton.leadingAnchor),
+//            addImageButton.leadingAnchor.constraint(equalTo: imageLabel.trailingAnchor)
+//        ])
+        
+        
+        
+        
+        
+    }
+    
+    
+    @objc func addImageAttachment(_sender: Any) {
         // opening camera
         cameraHelper.openCamera(in: self) { [weak self] image in
             guard let image = image else { return }
             
             // Adding attachment
-            self?.imagesAttached.append(image)
-            self?.attachmentCollection.reloadData()
+            //            self?.imagesAttached.append(image)
+            //            self?.attachmentCollection.reloadData()
         }
     }
     
-    @IBAction func saveTapped(_ sender: UIBarButtonItem) {
+//    @IBAction func addImageAttachment(_ sender: Any) {
+//        // opening camera
+//        cameraHelper.openCamera(in: self) { [weak self] image in
+//            guard let image = image else { return }
+//
+//            // Adding attachment
+//            //            self?.imagesAttached.append(image)
+//            //            self?.attachmentCollection.reloadData()
+//        }
+//    }
+    //
+
+    
+    
+    @objc func saveTapped(_ sender: UIBarButtonItem) {
         hapticGenerator = UINotificationFeedbackGenerator()
         hapticGenerator?.prepare()
-        
+
         guard isValidTask() else {
             hapticGenerator?.notificationOccurred(.warning)
             return
@@ -77,7 +274,7 @@ class TaskDetailsViewController: UIViewController{
             self.navigationController?.popViewController(animated: true)
             return
         }
-        
+
         hapticGenerator?.notificationOccurred(.success)
 
         if isUpdate {
@@ -86,7 +283,7 @@ class TaskDetailsViewController: UIViewController{
             self.delegate?.didTapSave(task: task)
         }
         self.navigationController?.popViewController(animated: true)
-        
+
         hapticGenerator = nil
     }
     
@@ -128,31 +325,31 @@ class TaskDetailsViewController: UIViewController{
         return task
     }
     
-    func loadTaskForUpdate() {
-        guard let task = self.task else {
-            subTasksTextView.textColor = .placeholderText
-            return
-        }
-        taskTitleTextField.text = task.title
-        subTasksTextView.text = task.subTasks
-        endDateTextField.text = task.dueDate
-        
-        // Recover attachments
-        if let attachments = task.attachments {
-            imagesAttached = NSKeyedUnarchiver.unarchiveObject(with: attachments) as? [UIImage] ?? []
-        }
-    }
+        func loadTaskForUpdate() {
+            guard let task = self.task else {
+                subTasksTextView.textColor = .placeholderText
+                return
+            }
+            taskTitleTextField.text = task.title
+            subTasksTextView.text = task.subTasks
+            endDateTextField.text = task.dueDate
     
-    // IBOUTLET for datepicker
-    /// function is called when `Date is changed`
-    /// `Dateformatter` is used to convert `Date` to `String`
-    @objc func didPickDate(_ sender: UIDatePicker) {
-        dateFormatter.dateFormat = "MM/dd/yyyy hh:mm a"
-        let selectedDate = sender.date
-        self.selectedDateTimeStamp = sender.date.timeIntervalSince1970
-        endDate = dateFormatter.string(from: selectedDate)
-        endDateTextField.text = endDate
-    }
+            // Recover attachments
+            if let attachments = task.attachments {
+                imagesAttached = NSKeyedUnarchiver.unarchiveObject(with: attachments) as? [UIImage] ?? []
+            }
+        }
+    
+        // IBOUTLET for datepicker
+        /// function is called when `Date is changed`
+        /// `Dateformatter` is used to convert `Date` to `String`
+        @objc func didPickDate(_ sender: UIDatePicker) {
+            dateFormatter.dateFormat = "MM/dd/yyyy hh:mm a"
+            let selectedDate = sender.date
+            self.selectedDateTimeStamp = sender.date.timeIntervalSince1970
+            endDate = dateFormatter.string(from: selectedDate)
+            endDateTextField.text = endDate
+        }
     
 }
 extension TaskDetailsViewController: UITextFieldDelegate, UITextViewDelegate {
@@ -180,22 +377,23 @@ extension TaskDetailsViewController: UITextFieldDelegate, UITextViewDelegate {
 }
 
 extension TaskDetailsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return imagesAttached.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
+
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Cell.photoCell, for: indexPath) as! ImageAttachmentCell
         let image = imagesAttached[indexPath.row]
-        
+
         cell.setImage(image)
-        
+
         return cell
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         debugPrint("Click: \(indexPath.row) \(imagesAttached[indexPath.row])")
     }
 }
+

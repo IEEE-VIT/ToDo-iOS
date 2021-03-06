@@ -106,9 +106,21 @@ class TaskDetailsViewController: UIViewController{
         b.setTitle("Add image", for: .normal)
         b.setTitleColor(.systemBlue, for: .normal)
         b.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .regular)
-        
+        b.addTarget(self, action: #selector(addPhotoTapped), for: .touchUpInside)
         
         return b
+    }()
+    
+    
+    let attachmentCollection: UICollectionView = {
+        let viewLayout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: viewLayout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(ImageAttachmentCell.self, forCellWithReuseIdentifier: ImageAttachmentCell.identifier)
+        
+        
+        
+        return collectionView
     }()
     
     
@@ -127,9 +139,13 @@ class TaskDetailsViewController: UIViewController{
     
     var hapticGenerator: UINotificationFeedbackGenerator? = nil
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        attachmentCollection.dataSource = self
+        attachmentCollection.delegate = self
 
         
         // programmatically add the savebutton to the right bar button item
@@ -158,6 +174,8 @@ class TaskDetailsViewController: UIViewController{
     
     // adding and constraining UI elements
     func setupUI() {
+        
+        
         
         self.view.addSubview(taskLabel)
         NSLayoutConstraint.activate([
@@ -216,24 +234,45 @@ class TaskDetailsViewController: UIViewController{
         
         
         // This will be added back in future PR
-//        self.view.addSubview(imageLabel)
-//        NSLayoutConstraint.activate([
-//            imageLabel.topAnchor.constraint(equalTo: endDateTextField.bottomAnchor, constant: 20),
-//            imageLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-//
-//
-//        ])
-//        self.view.addSubview(addImageButton)
-//        NSLayoutConstraint.activate([
-//            addImageButton.topAnchor.constraint(equalTo: endDateTextField.bottomAnchor, constant: 20),
-//            addImageButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
-//            imageLabel.trailingAnchor.constraint(equalTo: addImageButton.leadingAnchor),
-//            addImageButton.leadingAnchor.constraint(equalTo: imageLabel.trailingAnchor)
-//        ])
+        self.view.addSubview(imageLabel)
+        NSLayoutConstraint.activate([
+            imageLabel.topAnchor.constraint(equalTo: endDateTextField.bottomAnchor, constant: 20),
+            imageLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+
+
+        ])
+        self.view.addSubview(addImageButton)
+        NSLayoutConstraint.activate([
+            addImageButton.topAnchor.constraint(equalTo: endDateTextField.bottomAnchor, constant: 20),
+            addImageButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            imageLabel.trailingAnchor.constraint(equalTo: addImageButton.leadingAnchor),
+            addImageButton.leadingAnchor.constraint(equalTo: imageLabel.trailingAnchor)
+        ])
+        
+        
+        self.view.addSubview(attachmentCollection)
+        attachmentCollection.backgroundColor = .black
+        NSLayoutConstraint.activate([
+            attachmentCollection.topAnchor.constraint(equalTo: imageLabel.bottomAnchor, constant: 10),
+            attachmentCollection.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
+            attachmentCollection.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10),
+            attachmentCollection.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -10),
+//            attachmentCollection.heightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.2)
+        ])
         
         
         
         
+    }
+    
+    @objc func addPhotoTapped(_ sender: Any) {
+        
+        cameraHelper.openCamera(in: self) { [weak self ] image in
+            guard let image = image else { return }
+            self?.imagesAttached.append(image)
+            self?.attachmentCollection.reloadData()
+            
+        }
         
     }
     
@@ -248,7 +287,6 @@ class TaskDetailsViewController: UIViewController{
 //            //            self?.attachmentCollection.reloadData()
 //        }
 //    }
-    
     
     
     @objc func saveTapped(_ sender: UIBarButtonItem) {
@@ -365,7 +403,13 @@ extension TaskDetailsViewController: UITextFieldDelegate, UITextViewDelegate {
     }
 }
 
-extension TaskDetailsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension TaskDetailsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 100, height: 100)
+    }
+    
+    
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return imagesAttached.count
@@ -373,7 +417,7 @@ extension TaskDetailsViewController: UICollectionViewDelegate, UICollectionViewD
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Cell.photoCell, for: indexPath) as! ImageAttachmentCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageAttachmentCell.identifier, for: indexPath) as! ImageAttachmentCell
         let image = imagesAttached[indexPath.row]
 
         cell.setImage(image)
